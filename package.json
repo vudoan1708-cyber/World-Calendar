@@ -1,0 +1,22 @@
+{
+  "name": "uk-calendar",
+  "version": "1.0.0",
+  "description": "personal project about UK holidays and users' favourite activities during those",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "UK",
+    "calendar",
+    "logging",
+    "tool"
+  ],
+  "author": "Vu Doan",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nedb": "^1.8.0"
+  }
+}

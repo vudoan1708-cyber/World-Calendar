@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="assets/styles.css">
+    <title>Calendar</title>
+</head>
+<body>
+    <div id="country">
+        UK
+    </div>
+
+    <!-- years -->
+    <div id="years">
+        <p id="chosenYear"></p>
+        <button id="backYear" class="yeaBtns" onclick="prevYear()"><<<</button>
+        <button id="forwardYear" class="yeaBtns" onclick="nextYear()">>>></button>
+    </div>
+
+    <div id="canvas">
+        <div id="btnCentering" style="opacity: 1;">
+            <button class="btnProperties" id="jan" onclick="getMonth(1)">1</button>
+            <button class="btnProperties" id="feb" onclick="getMonth(2)">2</button>
+            <button class="btnProperties" id="mar" onclick="getMonth(3)">3</button>
+            <button class="btnProperties" id="apr" onclick="getMonth(4)">4</button>
+            <button class="btnProperties" id="may" onclick="getMonth(5)">5</button>
+            <button class="btnProperties" id="jun" onclick="getMonth(6)">6</button>
+            <button class="btnProperties" id="jul" onclick="getMonth(7)">7</button>
+            <button class="btnProperties" id="aug" onclick="getMonth(8)">8</button>
+            <button class="btnProperties" id="sep" onclick="getMonth(9)">9</button>
+            <button class="btnProperties" id="oct" onclick="getMonth(10)">10</button>
+            <button class="btnProperties" id="nov" onclick="getMonth(11)">11</button>
+            <button class="btnProperties" id="dec" onclick="getMonth(12)">12</button>
+        </div>
+    </div>
+
+
+    <!-- hidden layers -->
+
+    <!-- form -->
+    <div id="form">
+        <div id="container">
+            <input type="text" aria-label="input" id="searchCountry" name="searchCountry" placeholder="UK">
+            <button id="search" onclick="changeCountry()">Search</button>
+        </div>
+    </div>
+
+    <!-- display -->
+    <div id="displayMonths">
+
+        <!-- all the months -->
+        <div id="displayAll">
+
+        </div>
+    </div>
+
+    <div id="info_container">
+        
+    </div>
+
+    <div id="backBtn" onclick="goBack()">
+        <img src="assets/img/left_arrow.png" alt="A Back Arrow Button">
+    </div>
+
+
+
+    <!-- bottom layer -->
+    <!-- arrow -->
+    <button id="arrow" onclick="showSearchBar()">
+        ^
+    </button> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"> </script>
+    <script src="sketch.js"></script>
+</body>
+</html>

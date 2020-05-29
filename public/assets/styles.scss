@@ -1,0 +1,254 @@
+$bg-color: (primary: rgb(104, 135, 123),
+            secondary: rgba(16, 15, 15, 0.364),
+            hover: rgb(109, 158, 158),
+            years: rgb(190, 190, 190),
+            minor: rgba(42, 43, 42, 0.5));
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    background-image: linear-gradient(to right, rgb(104, 135, 123), rgb(44, 43, 43));
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    overflow: hidden;
+    font-size: 20px;
+    transition: 0.5s ease-in-out;
+}
+
+body {
+    min-width: 100%;
+    min-height: 100vh;
+
+    #country {
+        text-align: center;
+        margin: 20px;
+        padding: 10px;
+        font-weight: 900;
+        font-size: 1.5rem;
+    }
+
+    #years {
+        position: relative;
+        width: 50%;
+        transform: translateX(50%);
+        text-align: center;
+
+        // both buttons properties
+        .yeaBtns {
+            border-radius: 5px;
+            margin-bottom: 5px;
+            padding: 5px;
+            background-color: map-get($bg-color, years);
+            outline: none;
+            transition: 0.25s ease-in-out;
+
+            &:hover {
+                background-color: white;
+                box-shadow: 5px 5px 15px black;
+                cursor: pointer;
+            }
+        }
+
+        #backYear {
+            float: left;
+            clear: left;
+        }
+
+        #forwardYear {
+            float: right;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: -20px;
+            color: map-get($bg-color, years);
+            cursor: context-menu;
+        }
+    }
+
+    #canvas {
+        clear: right;
+        display: flex;
+        text-align: center;
+
+        #btnCentering {
+            text-align: center;
+            position: absolute;
+            width: 50%;
+            height: auto;
+            opacity: 0;
+            // top: -25%;
+            transform: translateX(50%);
+            background-color: map-get($bg-color, minor);
+            border-radius: 5px;
+            box-shadow: 5px 5px 10px black;
+            transition: 0.5s ease-in-out;
+
+            .btnProperties {
+                background-color: map-get($bg-color, secondary);
+                color: white;
+                margin: 5%;
+                padding: 20px;
+                border: none;
+                cursor: pointer;
+                transition: 0.5s ease-in-out;
+
+                &:hover {
+                    background-color: map-get($bg-color, hover);
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    // month list
+    #displayMonths {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        opacity: 0;
+        background-color: map-get($bg-color, minor);
+        white-space: nowrap;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        transition: 0.5s ease-in-out;
+
+        // holiday list
+        .li_Months {
+            position: relative;
+            margin: 10px;
+            padding: 20px;
+            color: white;
+            cursor: pointer;
+            transition: 0.5s ease-in-out;
+        }
+    }
+
+    // info
+    #info_container {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        bottom: 60%;
+
+        .info {
+            position: relative;
+            text-align: center;
+            margin: auto;
+            width: 25%;
+            height: auto;
+            color: white;
+            background-color: map-get($bg-color, secondary);
+            padding: 10px;
+            border-radius: 10px;
+        }
+    }
+    
+
+    // arrow
+    #arrow {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        text-align: center;
+        background-color: map-get($bg-color, minor);
+        border: none;
+        padding: 5px 25px;
+        font-size: 1.25rem;
+        color: white;
+        outline: none;
+        transition: 0.5s ease-in-out;
+
+        &:hover {
+            background-color: map-get($bg-color, hover);
+            cursor: pointer;
+        }
+    }
+
+    // back arrow button
+    #backBtn {
+        position: absolute;
+        top: 0;
+        visibility: hidden;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+
+        img {
+            padding: 5px;
+            width: 15%;
+            height: auto;
+            border-radius: 10px;
+            transition: 0.5s ease-in-out;
+
+            &:hover {
+                background-color: rgb(181, 181, 181);
+            }
+        }
+    }
+
+    // form
+    #form {
+        position: fixed;
+        width: 100%;
+        height: auto;
+        top: 100%;
+        text-align: center;
+        transition: 0.5s ease-in-out;
+
+        #container {
+            position: relative;
+            padding: 40px;
+            background-color: map-get($bg-color, minor);
+
+            input[type=text] {
+                border: none;
+                font-size: 1.5rem;
+                border-radius: 5px;
+            }
+
+            #search {
+                border: none;
+                margin-left: 25px;
+                padding: 20px;
+                background-color: map-get($bg-color, minor);
+                color: white;
+                border-radius: 5px;
+                outline: none;
+                transition: 0.25s ease-in-out;
+
+                &:hover {
+                    background-color: rgb(181, 181, 181);
+                    color: map-get($bg-color, minor);
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+// scroll bar
+
+/* width of the entire scrollbar */
+#displayMonths::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* color of the tracking area */
+#displayMonths::-webkit-scrollbar-track {
+    background: rgb(0, 0, 0);
+}
+
+
+#displayMonths::-webkit-scrollbar-thumb {
+    background-color: map-get($bg-color, primary);    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 2px solid rgb(0, 0, 0);  /* creates padding around scroll thumb */
+}
