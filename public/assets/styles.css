@@ -65,7 +65,7 @@ body #years #forwardYear {
   float: right;
 }
 
-body #years p {
+body #years #chosenYear {
   font-size: 1rem;
   margin-bottom: -20px;
   color: #bebebe;
@@ -136,6 +136,51 @@ body #displayMonths .li_Months {
   transition: 0.5s ease-in-out;
 }
 
+body #months {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  bottom: 70%;
+  color: white;
+}
+
+body #months .monBtns {
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #bebebe;
+  outline: none;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+}
+
+body #months .monBtns:hover {
+  background-color: white;
+  -webkit-box-shadow: 5px 5px 15px black;
+          box-shadow: 5px 5px 15px black;
+  cursor: pointer;
+}
+
+body #months #backMonth {
+  visibility: hidden;
+  margin-left: 25%;
+  float: left;
+  clear: left;
+}
+
+body #months #forwardMonth {
+  visibility: hidden;
+  margin-right: 25%;
+  float: right;
+  clear: right;
+}
+
+body #months #chosenMonth {
+  font-size: 1rem;
+  margin-bottom: -20px;
+  color: #bebebe;
+  cursor: context-menu;
+}
+
 body #info_container {
   position: absolute;
   text-align: center;
@@ -162,10 +207,10 @@ body #description {
   height: auto;
   top: 100%;
   text-align: center;
-  color: black;
+  color: #b5bfc2;
   font-size: 1rem;
   font-weight: bold;
-  padding: 50px;
+  padding: 30px 0 70px 0;
   background-color: rgba(42, 43, 42, 0.5);
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
@@ -196,6 +241,7 @@ body #backBtn {
   top: 0;
   visibility: hidden;
   cursor: pointer;
+  outline: none;
   -webkit-transition: 0.1s ease-in-out;
   transition: 0.1s ease-in-out;
 }
@@ -270,5 +316,11 @@ body #form #container #search:hover {
   /* roundness of the scroll thumb */
   border: 2px solid black;
   /* creates padding around scroll thumb */
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 4vw;
+  }
 }
 /*# sourceMappingURL=styles.css.map */

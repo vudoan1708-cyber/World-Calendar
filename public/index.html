@@ -20,18 +20,18 @@
 
     <div id="canvas">
         <div id="btnCentering" style="opacity: 1;">
-            <button class="btnProperties" id="jan" onclick="getMonth(1)">1</button>
-            <button class="btnProperties" id="feb" onclick="getMonth(2)">2</button>
-            <button class="btnProperties" id="mar" onclick="getMonth(3)">3</button>
-            <button class="btnProperties" id="apr" onclick="getMonth(4)">4</button>
-            <button class="btnProperties" id="may" onclick="getMonth(5)">5</button>
-            <button class="btnProperties" id="jun" onclick="getMonth(6)">6</button>
-            <button class="btnProperties" id="jul" onclick="getMonth(7)">7</button>
-            <button class="btnProperties" id="aug" onclick="getMonth(8)">8</button>
-            <button class="btnProperties" id="sep" onclick="getMonth(9)">9</button>
-            <button class="btnProperties" id="oct" onclick="getMonth(10)">10</button>
-            <button class="btnProperties" id="nov" onclick="getMonth(11)">11</button>
-            <button class="btnProperties" id="dec" onclick="getMonth(12)">12</button>
+            <button class="btnProperties" id="jan" onclick="getMonth(1, 0)">1</button>
+            <button class="btnProperties" id="feb" onclick="getMonth(2, 0)">2</button>
+            <button class="btnProperties" id="mar" onclick="getMonth(3, 0)">3</button>
+            <button class="btnProperties" id="apr" onclick="getMonth(4, 0)">4</button>
+            <button class="btnProperties" id="may" onclick="getMonth(5, 0)">5</button>
+            <button class="btnProperties" id="jun" onclick="getMonth(6, 0)">6</button>
+            <button class="btnProperties" id="jul" onclick="getMonth(7, 0)">7</button>
+            <button class="btnProperties" id="aug" onclick="getMonth(8, 0)">8</button>
+            <button class="btnProperties" id="sep" onclick="getMonth(9, 0)">9</button>
+            <button class="btnProperties" id="oct" onclick="getMonth(10, 0)">10</button>
+            <button class="btnProperties" id="nov" onclick="getMonth(11, 0)">11</button>
+            <button class="btnProperties" id="dec" onclick="getMonth(12, 0)">12</button>
         </div>
     </div>
 
@@ -55,6 +55,13 @@
         </div>
     </div>
 
+    <!-- display a choosen month -->
+    <div id="months">
+        <p id="chosenMonth"></p>
+        <button id="backMonth" class="monBtns" onclick="getMonth(currentMonth, -1)"><<<</button>
+        <button id="forwardMonth" class="monBtns" onclick="getMonth(currentMonth, 1)">>>></button>
+    </div>
+
     <!-- holiday information -->
     <div id="info_container">
         
@@ -62,7 +69,7 @@
 
     <!-- holiday description -->
     <div id="description">
-        
+        Click/Press on one of the holidays above to see its detailed descriptions
     </div>
 
     <div id="backBtn" onclick="goBack()">

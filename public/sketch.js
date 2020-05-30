@@ -1,13 +1,19 @@
 let calendarData = null; // variable to store the external data
 
+let currentMonth = 0;
+
 let holidays = [], // variable to store all the available holidays
     months = [], // variable to store the months
     days = [], // variable to store the days
     dates = [], // variable to store days and months
     descriptions = []; // variable to store descriptions for the holidays
 
-let d = new Date(); // get year
+// get year
+let d = new Date(); 
 let yearHTML = document.getElementById('chosenYear').innerHTML = d.getFullYear();
+
+// chosen month
+let chosenMonth = document.getElementById('chosenMonth');
 
 // boolean
 let loading = true;
@@ -32,6 +38,12 @@ const jan = document.getElementById('jan'),
 
       // info container
       info_container = document.getElementById('info_container');
+
+      // prevMonth button
+      backMonth = document.getElementById('backMonth');
+
+      // nextMonth button
+      forwardMonth = document.getElementById('forwardMonth');
 
       // prevYear button
       backYear = document.getElementById('backYear');
@@ -64,6 +76,11 @@ getCalendar(country.textContent, yearHTML)
     // pass data to calendarData
     .then(data => {
         calendarData = data;
+
+        if (calendarData == undefined || calendarData == null || calendarData == '') {
+            document.body.style.visibility = 'hidden';
+        } else document.body.style.visibility = 'visible';
+
         console.log(calendarData);
     })
 
@@ -131,7 +148,7 @@ function prevYear() {
     return yearHTML;
 }
 
-// get th next year
+// get the next year
 function nextYear() {
     yearHTML++;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
@@ -184,20 +201,28 @@ function goBack() {
     // show the country search bar and button
     form.style.visibility = 'visible';
 
-    // show the back and forwards buttons
+    // show the back and forwards year buttons
     backYear.style.visibility = 'visible';
     forwardYear.style.visibility = 'visible';
 
-    // clear back arrow button
+    // hide the back and forwards month buttons
+    backMonth.style.visibility = 'hidden';
+    forwardMonth.style.visibility = 'hidden';
+
+    // hide back arrow button
     backBtn.style.visibility = 'hidden';
 
-    // clear displayMonths container
+    // hide displayMonths container
     displayMonths.style.opacity = 0;
 
     displayMonths.style.visibility = 'hidden';
 
+    // hide chosenMonth
+    chosenMonth.style.display = 'none';
+
     // make the button container appear
     btnCentering.style.opacity = 1;
+    btnCentering.style.visibility = 'visible';
 
     // change background back to default
     html.style.backgroundImage = 'linear-gradient(to right, rgb(104, 135, 123), rgb(44, 43, 43))';
@@ -231,6 +256,14 @@ function showSearchBar() {
 
 // change country
 function changeCountry() {
+
+    // refresh the arrays
+    holidays = [];
+    months = [];
+    days = [];
+    dates = [];
+    descriptions = [];
+
     let messages = [];
 
     // if there is no inputted data
@@ -281,7 +314,50 @@ function changeCountry() {
 }
 
 // Months
-function getMonth(nMonth) {
+function getMonth(nMonth, incrementMonth) {
+
+    // show the back and forwards month buttons
+    backMonth.style.visibility = 'visible';
+    forwardMonth.style.visibility = 'visible';
+    
+    // check if the passed month parameter is less than 13 and larger than 0
+    if (nMonth < 13 && nMonth > 0) {
+
+        // check if nextMonth or prevMonth button is pressed
+        // if prevMonth button is pressed
+        if (incrementMonth == -1) {
+
+            // the latest month stored in currentMonth variable 
+            // will be passed in as a parameter instead of a hard-coded number from HTML
+            // and then, its value will be incrementally decreased
+            nMonth--;
+            
+            // reset the checking variable to do the job once
+            incrementMonth = 0;
+        }
+        else if (incrementMonth == 1) {
+
+            // the latest month stored in currentMonth variable
+            // will be passed in as a parameter instead of a hard-coded number from HTML
+            // and then, its value will be incrementally increased
+            nMonth++;
+            
+            // reset the checking variable to do the job once
+            incrementMonth = 0;
+        }
+
+        // hide or show different buttons depending on different situations
+        if (nMonth == 1) {
+            backMonth.style.visibility = 'hidden';
+        } else if (nMonth == 12) {
+            forwardMonth.style.visibility = 'hidden';
+        } else {
+
+            // show the back and forwards month buttons
+            backMonth.style.visibility = 'visible';
+            forwardMonth.style.visibility = 'visible';
+        }
+    } 
 
     // collapse the country search bar if it's shown
     if (arrow.style.bottom == '18%') showSearchBar();
@@ -292,10 +368,14 @@ function getMonth(nMonth) {
     // show description
     description_container.style.visibility = 'visible';
 
-    // show display month
+    // show displayMonth
     displayMonths.style.visibility = 'visible';
 
-    // remove the back and forwards buttons
+    // show chosenMonth
+    chosenMonth.style.display = 'block';
+    chosenMonth.innerHTML = nMonth;
+
+    // remove the back and forwards year buttons
     backYear.style.visibility = 'hidden';
     forwardYear.style.visibility = 'hidden';
 
@@ -322,6 +402,7 @@ function getMonth(nMonth) {
 
     // make the button container disappear
     btnCentering.style.opacity = 0;
+    btnCentering.style.visibility = 'hidden';
 
 
     for (let m = 0; m < months.length; m++) {
@@ -342,7 +423,7 @@ function getMonth(nMonth) {
 
             // show info when on hover
             allHolidays[m].addEventListener('mouseover', () => {
-                console.log(dates[m]);
+                
                 infoHolidays[m] = document.createElement('div');
 
                 // assign class names to the div's
@@ -387,6 +468,9 @@ function getMonth(nMonth) {
             })
         }
     }
+
+    // assign the latest chosen month to a global variable
+    currentMonth = nMonth;
 }
 
 

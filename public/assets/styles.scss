@@ -65,7 +65,7 @@ body {
             float: right;
         }
 
-        p {
+        #chosenYear {
             font-size: 1rem;
             margin-bottom: -20px;
             color: map-get($bg-color, years);
@@ -132,6 +132,52 @@ body {
         }
     }
 
+    // chosenMonth 
+    #months {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        bottom: 70%;
+        color: white;
+
+        // both buttons' properties
+        .monBtns {
+            border-radius: 5px;
+            // margin: 0 25%;
+            padding: 5px;
+            background-color: map-get($bg-color, years);
+            outline: none;
+            transition: 0.1s ease-in-out;
+
+            &:hover {
+                background-color: white;
+                box-shadow: 5px 5px 15px black;
+                cursor: pointer;
+            }
+        }
+
+        #backMonth {
+            visibility: hidden;
+            margin-left: 25%;
+            float: left;
+            clear: left;
+        }
+
+        #forwardMonth {
+            visibility: hidden;
+            margin-right: 25%;
+            float: right;
+            clear: right;
+        }
+
+        #chosenMonth {
+            font-size: 1rem;
+            margin-bottom: -20px;
+            color: map-get($bg-color, years);
+            cursor: context-menu;
+        }
+    }
+
     // info
     #info_container {
         position: absolute;
@@ -160,10 +206,10 @@ body {
         height: auto;
         top: 100%;
         text-align: center;
-        color: black;
+        color: rgb(181, 191, 194);
         font-size: 1rem;
         font-weight: bold;
-        padding: 50px;
+        padding: 30px 0 70px 0;
         background-color: map-get($bg-color, minor);
         transition: 0.5s ease-in-out;
     }
@@ -195,6 +241,7 @@ body {
         top: 0;
         visibility: hidden;
         cursor: pointer;
+        outline: none;
         transition: 0.1s ease-in-out;
 
         img {
@@ -267,4 +314,11 @@ body {
     background-color: map-get($bg-color, primary);    /* color of the scroll thumb */
     border-radius: 20px;       /* roundness of the scroll thumb */
     border: 2px solid rgb(0, 0, 0);  /* creates padding around scroll thumb */
+}
+
+// media query
+@media only screen and (max-width: 600px) {
+    html {
+      font-size: 4vw;
+    }
 }
