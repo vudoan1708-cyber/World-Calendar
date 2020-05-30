@@ -27,6 +27,9 @@ const jan = document.getElementById('jan'),
 
       btnCentering = document.getElementById('btnCentering');
 
+      // holiday description
+      description_container = document.getElementById('description');
+
       // info container
       info_container = document.getElementById('info_container');
 
@@ -55,7 +58,6 @@ const jan = document.getElementById('jan'),
       displayMonths = document.getElementById('displayMonths');
       displayAll = document.getElementById('displayAll');
 
-let Holidays = 0; // variable to trigger/showcases each month data
 
 getCalendar(country.textContent, yearHTML)
 
@@ -74,6 +76,7 @@ getCalendar(country.textContent, yearHTML)
             months[i] = calendarData.response.holidays[i].date.datetime.month;
             days[i] = calendarData.response.holidays[i].date.datetime.day;
             dates[i] = calendarData.response.holidays[i].date.iso;
+            descriptions[i] = calendarData.response.holidays[i].description;
         }
     })
     .then(() => {
@@ -88,26 +91,32 @@ function prevYear() {
     yearHTML--;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
 
-    // check if the year is available
-    if (calendarData.response.holidays.length == 0) {
+    // reload the api
+    // pass data to get either the search value if applicable, or the original value from html
+    getCalendar(searchCountry.value || country.textContent, yearHTML)
+            
+    // pass data to calendarData
+    .then(data => {
+        calendarData = data;
+        console.log(calendarData);
+    })
 
-        // hide the button
-        backYear.style.visibility = 'hidden';
-        yearHTML++;
-        return -1;
-    } else {
-        // reload the api
-        // pass data to get either the search value if applicable, or the original value from html
-        getCalendar(searchCountry.value || country.textContent, yearHTML)
-                
-        // pass data to calendarData
-        .then(data => {
-            calendarData = data;
-            console.log(calendarData);
-        })
+    // loop through the array and pass data to variables
+    .then(() => {
 
-        // loop through the array and pass data to variables
-        .then(() => {
+        // check if the year is not available
+        if (calendarData.response.holidays == undefined) {
+
+            // hide the button
+            backYear.style.visibility = 'hidden';
+            yearHTML++;
+            yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
+            return -1;
+        } else {
+
+            // show the next button
+            forwardYear.style.visibility = 'visible';
+
             for (let i = 0; i < calendarData.response.holidays.length; i++) {
                 
                 // pass data into the variable
@@ -115,10 +124,11 @@ function prevYear() {
                 months[i] = calendarData.response.holidays[i].date.datetime.month;
                 days[i] = calendarData.response.holidays[i].date.datetime.day;
                 dates[i] = calendarData.response.holidays[i].date.iso;
+                descriptions[i] = calendarData.response.holidays[i].description;
             }
-        })
-        return yearHTML;
-    }
+        }
+    })
+    return yearHTML;
 }
 
 // get th next year
@@ -126,27 +136,31 @@ function nextYear() {
     yearHTML++;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
 
-    // check if the year is available
-    if (calendarData.response.holidays.length == 0) {
+   // reload the api
+    // pass data to get either the search value if applicable, or the original value from html
+    getCalendar(searchCountry.value || country.textContent, yearHTML)
+            
+    // pass data to calendarData
+    .then(data => {
+        calendarData = data;
+        console.log(calendarData);
+    })
 
-        // hide the button
-        forwardYear.style.visibility = 'hidden';
-        yearHTML--;
-        return -1;
-    } else {
+    // loop through the array and pass data to variables
+    .then(() => {
+        // check if the year is available
+        if (calendarData.response.holidays == undefined) {
 
-        // reload the api
-        // pass data to get either the search value if applicable, or the original value from html
-        getCalendar(searchCountry.value || country.textContent, yearHTML)
-                
-        // pass data to calendarData
-        .then(data => {
-            calendarData = data;
-            console.log(calendarData);
-        })
+            // hide the button
+            forwardYear.style.visibility = 'hidden';
+            yearHTML--;
+            yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
+            return -1;
+        } else {
 
-        // loop through the array and pass data to variables
-        .then(() => {
+            // show the prev button
+            backYear.style.visibility = 'visible';
+
             for (let i = 0; i < calendarData.response.holidays.length; i++) {
                 
                 // pass data into the variable
@@ -154,10 +168,11 @@ function nextYear() {
                 months[i] = calendarData.response.holidays[i].date.datetime.month;
                 days[i] = calendarData.response.holidays[i].date.datetime.day;
                 dates[i] = calendarData.response.holidays[i].date.iso;
+                descriptions[i] = calendarData.response.holidays[i].description;
             }
-        })
-        return yearHTML;
-    }
+        }
+    })
+    return yearHTML;
 }
 
 // clear the holidays display and show back the months display
@@ -165,6 +180,9 @@ function goBack() {
 
     // hide the country search bar if it's shown
     if (arrow.style.bottom == '18%') showSearchBar();
+
+    // show the country search bar and button
+    form.style.visibility = 'visible';
 
     // show the back and forwards buttons
     backYear.style.visibility = 'visible';
@@ -187,15 +205,28 @@ function goBack() {
 
 // show search bar
 function showSearchBar() {
-    if (arrow.style.bottom == 0) {
-        form.style.top = '82%';
-        arrow.innerHTML = 'v';
-        arrow.style.bottom = '18%';
-    } else if (arrow.style.bottom == '18%') {
-        form.style.top = '100%';
-        arrow.innerHTML = '^';
-        arrow.style.bottom = '';
+    if (form.style.visibility != 'hidden') {
+        if (arrow.style.bottom == 0) {
+            form.style.top = '82%';
+            arrow.innerHTML = 'v';
+            arrow.style.bottom = '18%';
+        } else if (arrow.style.bottom == '18%') {
+            form.style.top = '100%';
+            arrow.innerHTML = '^';
+            arrow.style.bottom = '';
+        }
+    } else {
+        if (arrow.style.bottom == 0) {
+            description_container.style.top = '82%';
+            arrow.innerHTML = 'v';
+            arrow.style.bottom = '18%';
+        } else if (arrow.style.bottom == '18%') {
+            description_container.style.top = '100%';
+            arrow.innerHTML = '^';
+            arrow.style.bottom = '';
+        }
     }
+    
 }
 
 // change country
@@ -238,11 +269,12 @@ function changeCountry() {
                     months[i] = calendarData.response.holidays[i].date.datetime.month;
                     days[i] = calendarData.response.holidays[i].date.datetime.day;
                     dates[i] = calendarData.response.holidays[i].date.iso;
+                    descriptions[i] = calendarData.response.holidays[i].description;
                 }
             })
     }
 
-    // clear the search container
+    // hide the search container
     form.style.top = '100%';
     arrow.innerHTML = '^';
     arrow.style.bottom = '';
@@ -251,8 +283,14 @@ function changeCountry() {
 // Months
 function getMonth(nMonth) {
 
-    // hide the country search bar if it's shown
+    // collapse the country search bar if it's shown
     if (arrow.style.bottom == '18%') showSearchBar();
+
+    // hide the country search bar and button
+    form.style.visibility = 'hidden';
+
+    // show description
+    description_container.style.visibility = 'visible';
 
     // show display month
     displayMonths.style.visibility = 'visible';
@@ -340,14 +378,20 @@ function getMonth(nMonth) {
 
             // show detail info when clicked
             allHolidays[m].addEventListener('click', () => {
-                console.log(m)
+                description_container.innerHTML = descriptions[m];
+
+                // show the description box
+                description_container.style.top = '82%';
+                arrow.innerHTML = 'v';
+                arrow.style.bottom = '18%';
             })
         }
     }
 }
 
+
 async function getCalendar(COUNTRY, YEAR) {
-    const API_KEY = 'ceb72a05fddad9bdead36d51cc4dd9de995aad5a';
+    const API_KEY = '';
     
     let URL = `https://calendarific.com/api/v2/holidays?&api_key=${API_KEY}&country=${COUNTRY}&year=${YEAR}`;
     

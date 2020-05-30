@@ -47,7 +47,7 @@ body {
             padding: 5px;
             background-color: map-get($bg-color, years);
             outline: none;
-            transition: 0.25s ease-in-out;
+            transition: 0.1s ease-in-out;
 
             &:hover {
                 background-color: white;
@@ -150,6 +150,22 @@ body {
             padding: 10px;
             border-radius: 10px;
         }
+    }
+
+    // show description 
+    #description {
+        position: fixed;
+        visibility: hidden;
+        width: 100%;
+        height: auto;
+        top: 100%;
+        text-align: center;
+        color: black;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 50px;
+        background-color: map-get($bg-color, minor);
+        transition: 0.5s ease-in-out;
     }
     
 

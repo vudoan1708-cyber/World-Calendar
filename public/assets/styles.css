@@ -45,8 +45,8 @@ body #years .yeaBtns {
   padding: 5px;
   background-color: #bebebe;
   outline: none;
-  -webkit-transition: 0.25s ease-in-out;
-  transition: 0.25s ease-in-out;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 body #years .yeaBtns:hover {
@@ -153,6 +153,22 @@ body #info_container .info {
   background-color: rgba(16, 15, 15, 0.364);
   padding: 10px;
   border-radius: 10px;
+}
+
+body #description {
+  position: fixed;
+  visibility: hidden;
+  width: 100%;
+  height: auto;
+  top: 100%;
+  text-align: center;
+  color: black;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 50px;
+  background-color: rgba(42, 43, 42, 0.5);
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
 
 body #arrow {
