@@ -1,4 +1,5 @@
-let calendarData = null; // variable to store the external data
+let calendarData = null, // variable to store the external data
+    lat, lon;
 
 let currentMonth = 0;
 
@@ -71,38 +72,67 @@ const jan = document.getElementById('jan'),
       displayAll = document.getElementById('displayAll');
 
 
-getCalendar(country.textContent, yearHTML)
+// this function is meant to not ask for any API call until user permits location access
+// it will be initiated once, then will be looped forever inside the setTimeout function
+// every 100 millisecond
+function init() {
 
-    // pass data to calendarData
-    .then(data => {
-        calendarData = data;
-
-        if (calendarData == undefined || calendarData == null || calendarData == '') {
-            document.body.style.visibility = 'hidden';
-        } else document.body.style.visibility = 'visible';
-
-        console.log(calendarData);
-    })
-
-    // loop through the array and pass data to variables
-    .then(() => {
-        for (let i = 0; i < calendarData.response.holidays.length; i++) {
-
-            // pass data into the variable
-            holidays[i] = calendarData.response.holidays[i].name;
-            months[i] = calendarData.response.holidays[i].date.datetime.month;
-            days[i] = calendarData.response.holidays[i].date.datetime.day;
-            dates[i] = calendarData.response.holidays[i].date.iso;
-            descriptions[i] = calendarData.response.holidays[i].description;
-        }
-    })
+    // start by geolocating user's location
+    getGeolocation()
     .then(() => {
         loading = false;
     })
-    .catch(err => {
-        console.log(err);
-    })
 
+    // wait for a second and then, get data from the API
+    .then(setTimeout(() => {
+
+        // if loading is done and lat, lon value is true
+        if (!loading && lat && lon) {
+            console.log(lat, lon)
+            // trigger the below function with country identified through geolocation, and current year
+            getCalendar(country.textContent, yearHTML)
+
+            // pass data to calendarData
+            .then(data => {
+                calendarData = data;
+
+                if (calendarData == undefined || calendarData == null || calendarData == '') {
+                    document.body.style.visibility = 'hidden';
+                } else document.body.style.visibility = 'visible';
+
+                console.log(calendarData);
+            })
+
+            // loop through the array and pass data to variables
+            .then(() => {
+                for (let i = 0; i < calendarData.response.holidays.length; i++) {
+
+                    // pass data into the variable
+                    holidays[i] = calendarData.response.holidays[i].name;
+                    months[i] = calendarData.response.holidays[i].date.datetime.month;
+                    days[i] = calendarData.response.holidays[i].date.datetime.day;
+                    dates[i] = calendarData.response.holidays[i].date.iso;
+                    descriptions[i] = calendarData.response.holidays[i].description;
+                }
+            })
+
+            // catch error
+            .catch(err => {
+                console.log(err);
+            })
+        
+        // otherwise
+        } else if (!lat && !lon) {
+
+            // wait for one second and call the init function again
+            // if user has yet given permission for geolocation
+            setTimeout(init, 1000);
+        }
+    }, 1000))
+}
+
+init();
+ 
 // get the previous year
 function prevYear() {
     yearHTML--;
@@ -352,7 +382,7 @@ function getMonth(nMonth, incrementMonth) {
         } else if (nMonth == 12) {
             forwardMonth.style.visibility = 'hidden';
         } else {
-
+            
             // show the back and forwards month buttons
             backMonth.style.visibility = 'visible';
             forwardMonth.style.visibility = 'visible';
@@ -473,8 +503,31 @@ function getMonth(nMonth, incrementMonth) {
     currentMonth = nMonth;
 }
 
+async function recordPosition(position) {
+    
+    // get the latitude and longitude at user's location
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+
+    const URL = `https://geocode.xyz/${lat},${lon}?geoit=json`;
+    const request = await fetch(URL);
+    let countryInfo = await request.json();
+
+    // get country's code and insert it into HTML div tag
+    country.textContent = countryInfo.prov;
+}
+
+async function getGeolocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(recordPosition);
+    }
+}
+
 
 async function getCalendar(COUNTRY, YEAR) {
+
+    // login to calendarific to get API:
+    // https://calendarific.com/login
     const API_KEY = '';
     
     let URL = `https://calendarific.com/api/v2/holidays?&api_key=${API_KEY}&country=${COUNTRY}&year=${YEAR}`;
