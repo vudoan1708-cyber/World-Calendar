@@ -1,5 +1,6 @@
 let calendarData = null, // variable to store the external data
-    lat, lon;
+    countryInfo = null, // variable to store information of a country
+    lat, lon; // variables to store lat and lon values
 
 let currentMonth = 0;
 
@@ -33,6 +34,12 @@ const jan = document.getElementById('jan'),
       dec = document.getElementById('dec'),
 
       btnCentering = document.getElementById('btnCentering');
+
+      // support container
+      support_wrapper = document.getElementById('support_wrapper');
+
+      // support_button
+      support_button = document.getElementById('support_button');
 
       // holiday description
       description_container = document.getElementById('description');
@@ -74,7 +81,7 @@ const jan = document.getElementById('jan'),
 
 // this function is meant to not ask for any API call until user permits location access
 // it will be initiated once, then will be looped forever inside the setTimeout function
-// every 100 millisecond
+// every 100 millisecond until geolocation is available
 function init() {
 
     // start by geolocating user's location
@@ -86,11 +93,11 @@ function init() {
     // wait for a second and then, get data from the API
     .then(setTimeout(() => {
 
-        // if loading is done and lat, lon value is true
+        // if loading is done and lat, lon values are true
         if (!loading && lat && lon) {
-            console.log(lat, lon)
+            
             // trigger the below function with country identified through geolocation, and current year
-            getCalendar(country.textContent, yearHTML)
+            getCalendar(countryInfo.prov, yearHTML)
 
             // pass data to calendarData
             .then(data => {
@@ -98,7 +105,11 @@ function init() {
 
                 if (calendarData == undefined || calendarData == null || calendarData == '') {
                     document.body.style.visibility = 'hidden';
-                } else document.body.style.visibility = 'visible';
+                    html.style.visibility = 'hidden';
+                } else {
+                    document.body.style.visibility = 'visible';
+                    html.style.visibility = 'visible';
+                }
 
                 console.log(calendarData);
             })
@@ -140,7 +151,7 @@ function prevYear() {
 
     // reload the api
     // pass data to get either the search value if applicable, or the original value from html
-    getCalendar(searchCountry.value || country.textContent, yearHTML)
+    getCalendar(searchCountry.value || countryInfo.prov, yearHTML)
             
     // pass data to calendarData
     .then(data => {
@@ -185,7 +196,7 @@ function nextYear() {
 
    // reload the api
     // pass data to get either the search value if applicable, or the original value from html
-    getCalendar(searchCountry.value || country.textContent, yearHTML)
+    getCalendar(searchCountry.value || countryInfo.prov, yearHTML)
             
     // pass data to calendarData
     .then(data => {
@@ -258,6 +269,30 @@ function goBack() {
     html.style.backgroundImage = 'linear-gradient(to right, rgb(104, 135, 123), rgb(44, 43, 43))';
 }
 
+// show support
+function showSupport() {
+
+    // if the wrapper is not shown
+    if (support_wrapper.style.visibility != 'visible') {
+
+        // display support container
+        support_wrapper.style.visibility = 'visible';
+        support_wrapper.style.opacity = 1;
+
+        // change the text of the support button
+        support_button.textContent = 'X';
+
+    // otherwise
+    } else {
+        // hide support container
+        support_wrapper.style.visibility = 'hidden';
+        support_wrapper.style.opacity = 0;
+
+        // change the text of the support button
+        support_button.textContent = '?';
+    }
+}
+
 // show search bar
 function showSearchBar() {
     if (form.style.visibility != 'hidden') {
@@ -284,8 +319,29 @@ function showSearchBar() {
     
 }
 
+// get a country name code and change it to a full name
+async function getCountry() {
+    let name = searchCountry.value.toUpperCase();
+
+    // in case where UK is inserted rather than GB
+    if (name == 'UK') name = 'GB';
+
+    const URL = `https://restcountries.eu/rest/v2/alpha/${name}`;
+    const request = await fetch(URL);
+    
+    let countryFullName = await request.json();
+    
+    // add a country's native name
+    let nativeName = countryFullName.nativeName;
+    
+    // add a country's full name to the variable
+    countryFullName = countryFullName.name;
+
+    changeCountry(countryFullName, nativeName);
+}
+
 // change country
-function changeCountry() {
+function changeCountry(countryFullName, native) {
 
     // refresh the arrays
     holidays = [];
@@ -309,10 +365,12 @@ function changeCountry() {
 
     // otherwise
     } else {
-        // console.log(typeof(searchCountry.value));
 
-        // change html 
-        country.innerHTML = searchCountry.value.toUpperCase();
+        // change html
+        if(native != undefined || native != null || native != '')
+            country.innerHTML = countryFullName + ' ' + '(' + native + ')';
+
+        else country.innerHTML = countryFullName;
 
         // pass data to get different countries' result
         getCalendar(searchCountry.value, yearHTML)
@@ -511,10 +569,10 @@ async function recordPosition(position) {
 
     const URL = `https://geocode.xyz/${lat},${lon}?geoit=json`;
     const request = await fetch(URL);
-    let countryInfo = await request.json();
+    countryInfo = await request.json();
 
-    // get country's code and insert it into HTML div tag
-    country.textContent = countryInfo.prov;
+    // get country's name where user is at and insert it into HTML div tag
+    country.textContent = countryInfo.country;
 }
 
 async function getGeolocation() {

@@ -16,9 +16,12 @@ html {
   font-size: 20px;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
-body {
+body, body #support_wrapper {
   min-width: 100%;
   min-height: 100vh;
 }
@@ -47,6 +50,9 @@ body #years .yeaBtns {
   outline: none;
   -webkit-transition: 0.1s ease-in-out;
   transition: 0.1s ease-in-out;
+  -moz-transition: 0.1s ease-in-out;
+  -ms-transition: 0.1s ease-in-out;
+  -o-transition: 0.1s ease-in-out;
 }
 
 body #years .yeaBtns:hover {
@@ -66,9 +72,10 @@ body #years #forwardYear {
 }
 
 body #years #chosenYear {
-  font-size: 1rem;
-  margin-bottom: -20px;
-  color: #bebebe;
+  font-size: 1.5rem;
+  -webkit-text-stroke: 1.5px black;
+  -webkit-text-fill-color: #bebebe;
+  margin-bottom: -25px;
   cursor: context-menu;
 }
 
@@ -94,6 +101,9 @@ body #canvas #btnCentering {
           box-shadow: 5px 5px 10px black;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
 body #canvas #btnCentering .btnProperties {
@@ -105,6 +115,9 @@ body #canvas #btnCentering .btnProperties {
   cursor: pointer;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
 body #canvas #btnCentering .btnProperties:hover {
@@ -124,6 +137,9 @@ body #displayMonths {
   overflow-y: hidden;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
 body #displayMonths .li_Months {
@@ -134,6 +150,9 @@ body #displayMonths .li_Months {
   cursor: pointer;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
 body #months {
@@ -151,6 +170,9 @@ body #months .monBtns {
   outline: none;
   -webkit-transition: 0.1s ease-in-out;
   transition: 0.1s ease-in-out;
+  -moz-transition: 0.1s ease-in-out;
+  -ms-transition: 0.1s ease-in-out;
+  -o-transition: 0.1s ease-in-out;
 }
 
 body #months .monBtns:hover {
@@ -214,6 +236,74 @@ body #description {
   background-color: rgba(42, 43, 42, 0.5);
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
+}
+
+body #support_button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  padding: 10px 15px;
+  border-radius: 50%;
+  background-color: #bebebe;
+  color: black;
+  cursor: pointer;
+  -webkit-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -ms-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
+}
+
+body #support_button:hover {
+  background-color: lightyellow;
+  -webkit-box-shadow: 5px 5px 10px black;
+          box-shadow: 5px 5px 10px black;
+}
+
+body #support_wrapper {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  background-color: rgba(16, 15, 15, 0.364);
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -ms-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
+}
+
+body #support_wrapper #support_container {
+  position: absolute;
+  text-align: center;
+  width: 75%;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  margin: auto;
+  padding: 40px;
+  background-color: black;
+  overflow-y: scroll;
+}
+
+body #support_wrapper #support_container #support {
+  clear: left;
+  position: relative;
+  text-align: left;
+  color: #68877b;
+  line-height: 1.6;
+}
+
+body #support_wrapper #support_container #support a {
+  color: lightblue;
+  text-decoration: underline;
 }
 
 body #arrow {
@@ -229,6 +319,9 @@ body #arrow {
   outline: none;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
 body #arrow:hover {
@@ -244,18 +337,24 @@ body #backBtn {
   outline: none;
   -webkit-transition: 0.1s ease-in-out;
   transition: 0.1s ease-in-out;
+  -moz-transition: 0.1s ease-in-out;
+  -ms-transition: 0.1s ease-in-out;
+  -o-transition: 0.1s ease-in-out;
 }
 
-body #backBtn img {
+body #backBtn #backArrow {
   padding: 5px;
   width: 15%;
   height: auto;
   border-radius: 10px;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
-body #backBtn img:hover {
+body #backBtn #backArrow:hover {
   background-color: #b5b5b5;
 }
 
@@ -267,6 +366,9 @@ body #form {
   text-align: center;
   -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -ms-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
 }
 
 body #form #container {
@@ -291,6 +393,9 @@ body #form #container #search {
   outline: none;
   -webkit-transition: 0.25s ease-in-out;
   transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -ms-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
 }
 
 body #form #container #search:hover {
@@ -300,16 +405,19 @@ body #form #container #search:hover {
 }
 
 /* width of the entire scrollbar */
-#displayMonths::-webkit-scrollbar {
+#displayMonths::-webkit-scrollbar,
+#support_container::-webkit-scrollbar {
   width: 12px;
 }
 
 /* color of the tracking area */
-#displayMonths::-webkit-scrollbar-track {
+#displayMonths::-webkit-scrollbar-track,
+#support_container::-webkit-scrollbar-track {
   background: black;
 }
 
-#displayMonths::-webkit-scrollbar-thumb {
+#displayMonths::-webkit-scrollbar-thumb,
+#support_container::-webkit-scrollbar-thumb {
   background-color: #68877b;
   /* color of the scroll thumb */
   border-radius: 20px;

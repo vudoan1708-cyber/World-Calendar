@@ -7,19 +7,19 @@
     <title>Calendar</title>
 </head>
 <body>
-    <div id="country">
+    <div id="country" role="country_name">
         
     </div>
 
     <!-- years -->
-    <div id="years">
+    <div id="years" role="year">
         <p id="chosenYear"></p>
         <button id="backYear" class="yeaBtns" onclick="prevYear()"><<<</button>
         <button id="forwardYear" class="yeaBtns" onclick="nextYear()">>>></button>
     </div>
 
-    <div id="canvas">
-        <div id="btnCentering" style="opacity: 1;">
+    <div id="canvas" role="container for all buttons">
+        <div id="btnCentering" style="opacity: 1;" role="centering all buttons">
             <h5 style="color: gray; padding-top: 20px;">Months</h5>
             <button class="btnProperties" id="jan" onclick="getMonth(1, 0)">1</button>
             <button class="btnProperties" id="feb" onclick="getMonth(2, 0)">2</button>
@@ -36,6 +36,11 @@
         </div>
     </div>
 
+    <!-- bottom layer -->
+    <!-- arrow -->
+    <button id="arrow" onclick="showSearchBar()">
+        ^
+    </button> 
 
     <!-- hidden layers -->
 
@@ -43,7 +48,7 @@
     <div id="form">
         <div id="container">
             <input type="text" aria-label="input" id="searchCountry" name="searchCountry" placeholder="UK">
-            <button id="search" onclick="changeCountry()">Search</button>
+            <button id="search" onclick="getCountry()">Search</button>
         </div>
     </div>
 
@@ -73,17 +78,40 @@
         Click/Press on one of the holidays above to see its detailed descriptions
     </div>
 
+    <!-- back arrow button -->
     <div id="backBtn" onclick="goBack()">
-        <img src="assets/img/left_arrow.png" alt="A Back Arrow Button">
+        <img id="backArrow" src="assets/img/left_arrow.png" alt="A Back Arrow Button">
     </div>
 
+    <!-- support -->
+    <div id="support_wrapper" role="wrap the entire screen resolution">
+        <div id="support_container" role="information container">
+            <h2 style="color: lightyellow; margin-bottom: 40px;">Instructions</h2>
+            <h4 style="color: lightyellow; margin-bottom: 20px; float: left;">Supported Countries for Searching</h4>
+            <p id="support">The Search Bar is used for searching different countries that are
+                currently supported by the website. There are totally 230 available countries
+                which can be looked up at one's own pace, by using ISO alpha-2 code. </br><b>(such as United Kingdom: UK, 
+                Korean: KR, Japan: JP, or Vietnam: VN,....)</b>. </br>For further information, please have a look
+                at this website:</br> <a href="https://calendarific.com/supported-countries" target="_blank">https://calendarific.com/supported-countries</a></br></br>
+            </p>
 
+            <h4 style="color: lightyellow; margin-bottom: 20px; float: left;">Aims</h4>
+            <p id="support">One of The Main Purposes of this website is to provide general knowledge for everyone who takes interest
+                in learning about different cultures, traditions via national holidays of every country in the world. The website is able to 
+                give the basic detail of all holidays of a current year from a specific country, as well as foresee holiday's date occurence a few years back or later</br></br>
+            </p>
 
-    <!-- bottom layer -->
-    <!-- arrow -->
-    <button id="arrow" onclick="showSearchBar()">
-        ^
-    </button> 
+            <h4 style="color: lightyellow; margin-bottom: 20px; float: left;">Guidances</h4>
+            <p id="support">The Welcome page appears with a board which is full of numbers ranging from 1 to 12 that represent the months of a year (we call this the Month Display section). 
+                Click/Press a number to see the month's holidays. You are now inside the Holiday Display section, then Click/Press on a holiday to see its description as well as the date 
+                it is celebrated on.</br>
+                If you ever experience a page with no holidays on <b>ALL MONTHS</b> when in the Holiday Display section, please make sure you are connected to an Internet, press F5 to refresh the page and try again
+            </p>
+        </div>
+    </div>
+    <div id="support_button" role="button" onclick="showSupport()">
+        ?
+    </div>
     
     <script defer src="sketch.js"></script>
 </body>

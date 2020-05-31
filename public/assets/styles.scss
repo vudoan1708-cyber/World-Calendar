@@ -20,6 +20,9 @@ html {
     overflow: hidden;
     font-size: 20px;
     transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
 }
 
 body {
@@ -48,6 +51,9 @@ body {
             background-color: map-get($bg-color, years);
             outline: none;
             transition: 0.1s ease-in-out;
+            -moz-transition: 0.1s ease-in-out;
+            -ms-transition: 0.1s ease-in-out;
+            -o-transition: 0.1s ease-in-out;
 
             &:hover {
                 background-color: white;
@@ -66,9 +72,10 @@ body {
         }
 
         #chosenYear {
-            font-size: 1rem;
-            margin-bottom: -20px;
-            color: map-get($bg-color, years);
+            font-size: 1.5rem;
+            -webkit-text-stroke: 1.5px black;
+            -webkit-text-fill-color: map-get($bg-color, years);
+            margin-bottom: -25px;
             cursor: context-menu;
         }
     }
@@ -90,6 +97,9 @@ body {
             border-radius: 5px;
             box-shadow: 5px 5px 10px black;
             transition: 0.5s ease-in-out;
+            -moz-transition: 0.5s ease-in-out;
+            -ms-transition: 0.5s ease-in-out;
+            -o-transition: 0.5s ease-in-out;
 
             .btnProperties {
                 background-color: map-get($bg-color, secondary);
@@ -99,6 +109,9 @@ body {
                 border: none;
                 cursor: pointer;
                 transition: 0.5s ease-in-out;
+                -moz-transition: 0.5s ease-in-out;
+                -ms-transition: 0.5s ease-in-out;
+                -o-transition: 0.5s ease-in-out;
 
                 &:hover {
                     background-color: map-get($bg-color, hover);
@@ -120,6 +133,9 @@ body {
         overflow-x: scroll;
         overflow-y: hidden;
         transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
 
         // holiday list
         .li_Months {
@@ -129,6 +145,9 @@ body {
             color: white;
             cursor: pointer;
             transition: 0.5s ease-in-out;
+            -moz-transition: 0.5s ease-in-out;
+            -ms-transition: 0.5s ease-in-out;
+            -o-transition: 0.5s ease-in-out;
         }
     }
 
@@ -148,6 +167,9 @@ body {
             background-color: map-get($bg-color, years);
             outline: none;
             transition: 0.1s ease-in-out;
+            -moz-transition: 0.1s ease-in-out;
+            -ms-transition: 0.1s ease-in-out;
+            -o-transition: 0.1s ease-in-out;
 
             &:hover {
                 background-color: white;
@@ -212,8 +234,72 @@ body {
         padding: 30px 10px 90px 10px;
         background-color: map-get($bg-color, minor);
         transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
     }
     
+    #support_button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 5px;
+        padding: 10px 15px;
+        border-radius: 50%;
+        background-color: map-get($bg-color, years);
+        color: black;
+        cursor: pointer;
+        transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -ms-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+
+        &:hover {
+            background-color: lightyellow;
+            box-shadow: 5px 5px 10px black;
+        }
+    }
+
+    #support_wrapper {
+        @extend body;
+        position: absolute;
+        top: 0;
+        text-align: center;
+        background-color: map-get($bg-color, secondary);
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -ms-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+
+        #support_container {
+            position: absolute;
+            text-align: center;
+            width: 75%;
+            height: 100%;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%);
+            margin: auto;
+            padding: 40px;
+            background-color: black;
+            overflow-y: scroll;
+    
+            #support {
+                clear: left;
+                position: relative;
+                text-align: left;
+                color: map-get($bg-color, primary);
+                line-height: 1.6;
+
+                a {
+                    color: lightblue;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
 
     // arrow
     #arrow {
@@ -228,6 +314,9 @@ body {
         color: white;
         outline: none;
         transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
 
         &:hover {
             background-color: map-get($bg-color, hover);
@@ -243,13 +332,19 @@ body {
         cursor: pointer;
         outline: none;
         transition: 0.1s ease-in-out;
+        -moz-transition: 0.1s ease-in-out;
+        -ms-transition: 0.1s ease-in-out;
+        -o-transition: 0.1s ease-in-out;
 
-        img {
+        #backArrow {
             padding: 5px;
             width: 15%;
             height: auto;
             border-radius: 10px;
             transition: 0.5s ease-in-out;
+            -moz-transition: 0.5s ease-in-out;
+            -ms-transition: 0.5s ease-in-out;
+            -o-transition: 0.5s ease-in-out;
 
             &:hover {
                 background-color: rgb(181, 181, 181);
@@ -265,6 +360,9 @@ body {
         top: 100%;
         text-align: center;
         transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
 
         #container {
             position: relative;
@@ -286,6 +384,9 @@ body {
                 border-radius: 5px;
                 outline: none;
                 transition: 0.25s ease-in-out;
+                -moz-transition: 0.25s ease-in-out;
+                -ms-transition: 0.25s ease-in-out;
+                -o-transition: 0.25s ease-in-out;
 
                 &:hover {
                     background-color: rgb(181, 181, 181);
@@ -300,17 +401,20 @@ body {
 // scroll bar
 
 /* width of the entire scrollbar */
-#displayMonths::-webkit-scrollbar {
+#displayMonths::-webkit-scrollbar,
+#support_container::-webkit-scrollbar {
     width: 12px;
 }
 
 /* color of the tracking area */
-#displayMonths::-webkit-scrollbar-track {
+#displayMonths::-webkit-scrollbar-track,
+#support_container::-webkit-scrollbar-track {
     background: rgb(0, 0, 0);
 }
 
 
-#displayMonths::-webkit-scrollbar-thumb {
+#displayMonths::-webkit-scrollbar-thumb,
+#support_container::-webkit-scrollbar-thumb {
     background-color: map-get($bg-color, primary);    /* color of the scroll thumb */
     border-radius: 20px;       /* roundness of the scroll thumb */
     border: 2px solid rgb(0, 0, 0);  /* creates padding around scroll thumb */
