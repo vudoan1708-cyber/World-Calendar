@@ -110,8 +110,6 @@ function init() {
                     document.body.style.visibility = 'visible';
                     html.style.visibility = 'visible';
                 }
-
-                console.log(calendarData);
             })
 
             // loop through the array and pass data to variables
@@ -156,7 +154,6 @@ function prevYear() {
     // pass data to calendarData
     .then(data => {
         calendarData = data;
-        console.log(calendarData);
     })
 
     // loop through the array and pass data to variables
@@ -201,7 +198,6 @@ function nextYear() {
     // pass data to calendarData
     .then(data => {
         calendarData = data;
-        console.log(calendarData);
     })
 
     // loop through the array and pass data to variables
@@ -372,13 +368,18 @@ function changeCountry(countryFullName, native) {
 
         else country.innerHTML = countryFullName;
 
+        // in case the search value is undefined because of incorrect type of input 
+        if (countryFullName == undefined || native == undefined) {
+            country.innerHTML = 'The country is not available or the search input type is incorrect' + '</br>' +
+                                'Please refer to the Instruction (?) for further instruction'
+        }
+
         // pass data to get different countries' result
         getCalendar(searchCountry.value, yearHTML)
             
             // pass data to calendarData
             .then(data => {
                 calendarData = data;
-                console.log(calendarData);
             })
 
             // loop through the array and pass data to variables
@@ -418,7 +419,7 @@ function getMonth(nMonth, incrementMonth) {
             // the latest month stored in currentMonth variable 
             // will be passed in as a parameter instead of a hard-coded number from HTML
             // and then, its value will be incrementally decreased
-            nMonth--;
+            nMonth = nMonth + incrementMonth;
             
             // reset the checking variable to do the job once
             incrementMonth = 0;
@@ -428,7 +429,7 @@ function getMonth(nMonth, incrementMonth) {
             // the latest month stored in currentMonth variable
             // will be passed in as a parameter instead of a hard-coded number from HTML
             // and then, its value will be incrementally increased
-            nMonth++;
+            nMonth = nMonth + incrementMonth;
             
             // reset the checking variable to do the job once
             incrementMonth = 0;
