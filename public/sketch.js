@@ -585,13 +585,35 @@ async function getGeolocation() {
 
 async function getCalendar(COUNTRY, YEAR) {
 
-    // login to calendarific to get API:
-    // https://calendarific.com/login
-    const API_KEY = '';
+    ///////////////////////////////////////////
+    // this posting process is unnecessary for dealing with all the posted parameters
+    // but necessary if I want to use this method to get the API key from the server
+    // securely
     
+    // put the data into an object
+    const data = {
+        COUNTRY,
+        YEAR
+    };
+
+    // create options for POST method
+    const options =  {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    ///////////////////////////////////////////
+
+    // create response to the server side
+    const response = await fetch('/calendar/', options);
+    const API_KEY = await response.json();
+    
+    // fetch URL using the API_KEY from the server side
     let URL = `https://calendarific.com/api/v2/holidays?&api_key=${API_KEY}&country=${COUNTRY}&year=${YEAR}`;
     
-    let response = await fetch(URL);
-    calendarData = await response.json();
+    let calendar_response = await fetch(URL);
+    calendarData = await calendar_response.json();
     return calendarData;
 } 
