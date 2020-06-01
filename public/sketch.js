@@ -8,7 +8,9 @@ let holidays = [], // variable to store all the available holidays
     months = [], // variable to store the months
     days = [], // variable to store the days
     dates = [], // variable to store days and months
-    descriptions = []; // variable to store descriptions for the holidays
+    descriptions = [], // variable to store descriptions for the holidays
+    countryData = [], // variable to store searched country name
+    countryLists = []; // variable to store lists of countries for tabular display
 
 // get year
 let d = new Date(); 
@@ -78,6 +80,11 @@ const jan = document.getElementById('jan'),
       displayMonths = document.getElementById('displayMonths');
       displayAll = document.getElementById('displayAll');
 
+      // table
+      tabularDisplay = document.getElementById('tabularDisplay');
+      table_body = document.getElementById('table_body');
+      tableBtn = document.getElementById('tableBtn');
+
 
 // this function is meant to not ask for any API call until user permits location access
 // it will be initiated once, then will be looped forever inside the setTimeout function
@@ -144,6 +151,15 @@ init();
  
 // get the previous year
 function prevYear() {
+
+    // refresh the arrays
+    holidays = [];
+    months = [];
+    days = [];
+    dates = [];
+    descriptions = [];
+
+    // decrease the year
     yearHTML--;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
 
@@ -174,7 +190,7 @@ function prevYear() {
 
             for (let i = 0; i < calendarData.response.holidays.length; i++) {
                 
-                // pass data into the variable
+                // pass data into the variables
                 holidays[i] = calendarData.response.holidays[i].name;
                 months[i] = calendarData.response.holidays[i].date.datetime.month;
                 days[i] = calendarData.response.holidays[i].date.datetime.day;
@@ -188,6 +204,15 @@ function prevYear() {
 
 // get the next year
 function nextYear() {
+
+    // refresh the arrays
+    holidays = [];
+    months = [];
+    days = [];
+    dates = [];
+    descriptions = [];
+
+    // increase the year
     yearHTML++;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
 
@@ -217,7 +242,7 @@ function nextYear() {
 
             for (let i = 0; i < calendarData.response.holidays.length; i++) {
                 
-                // pass data into the variable
+                // pass data into the variables
                 holidays[i] = calendarData.response.holidays[i].name;
                 months[i] = calendarData.response.holidays[i].date.datetime.month;
                 days[i] = calendarData.response.holidays[i].date.datetime.day;
@@ -348,6 +373,7 @@ function changeCountry(countryFullName, native) {
 
     let messages = [];
 
+    // check for input availability
     // if there is no inputted data
     if (searchCountry.value  === '' || searchCountry.value  == null) {
 
@@ -368,38 +394,138 @@ function changeCountry(countryFullName, native) {
 
         else country.innerHTML = countryFullName;
 
+        // check for input validity
         // in case the search value is undefined because of incorrect type of input 
         if (countryFullName == undefined || native == undefined) {
             country.innerHTML = 'The country is not available or the search input type is incorrect' + '</br>' +
                                 'Please refer to the Instruction (?) for further instruction'
+        } else {
+            // pass data to get different countries' result
+            getCalendar(searchCountry.value, yearHTML)
+                
+                // pass data to calendarData
+                .then(data => {
+                    calendarData = data;
+                })
+
+                // loop through the array and pass data to variables
+                .then(() => {
+                    for (let i = 0; i < calendarData.response.holidays.length; i++) {
+                        
+                        // pass data into the variables
+                        holidays[i] = calendarData.response.holidays[i].name;
+                        months[i] = calendarData.response.holidays[i].date.datetime.month;
+                        days[i] = calendarData.response.holidays[i].date.datetime.day;
+                        dates[i] = calendarData.response.holidays[i].date.iso;
+                        descriptions[i] = calendarData.response.holidays[i].description;
+                    }
+                })
+
+            // save data to the database
+            saveCountry(countryFullName, native);
         }
 
-        // pass data to get different countries' result
-        getCalendar(searchCountry.value, yearHTML)
-            
-            // pass data to calendarData
-            .then(data => {
-                calendarData = data;
-            })
+        // hide the search container
+        form.style.top = '100%';
+        arrow.innerHTML = '^';
+        arrow.style.bottom = '';
+    }
+}
 
-            // loop through the array and pass data to variables
-            .then(() => {
-                for (let i = 0; i < calendarData.response.holidays.length; i++) {
-                    
-                    // pass data into the variable
-                    holidays[i] = calendarData.response.holidays[i].name;
-                    months[i] = calendarData.response.holidays[i].date.datetime.month;
-                    days[i] = calendarData.response.holidays[i].date.datetime.day;
-                    dates[i] = calendarData.response.holidays[i].date.iso;
-                    descriptions[i] = calendarData.response.holidays[i].description;
-                }
-            })
+async function saveCountry(countryFullName, native) {
+
+    // create data 
+    const data = {
+        origin: countryInfo.country,
+        countryFullName,
+        native
     }
 
-    // hide the search container
-    form.style.top = '100%';
-    arrow.innerHTML = '^';
-    arrow.style.bottom = '';
+    // create options for POST
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+
+    // check if original geolocation is not available
+    if (countryInfo.country == null || countryInfo.country == undefined || countryInfo.country == '') {
+        getGeolocation();
+    } else  {
+
+        // create request to the server side
+        const request = await fetch('/countries/', options);
+
+        // the latest response
+        await request.json();
+        // console.log(json);
+    }
+}
+
+async function searchedCountried(num) {
+
+    if (num == 1) {
+        tabularDisplay.style.visibility = 'hidden';
+        tabularDisplay.style.opacity = 0;
+    } else {
+        tabularDisplay.style.visibility = 'visible';
+        tabularDisplay.style.opacity = 1;
+
+        // fetch the endpoint using GET
+        const response = await fetch('/countries/');
+
+        // assign the response to a global variable in JSON format
+        countryData = await response.json();
+
+        // create an array that holds the number of tr and td elements
+        let tr_body = [],
+            td_body = [];
+
+        // get total number of th elements from HTML
+        let th = document.querySelectorAll('th');
+
+        // look for any appearance of the below created elements
+        let table_remover = document.querySelectorAll('.tr_body');
+
+        // check if there are any one of them
+        if(table_remover.length != 0) {
+
+            // loop through the length of the array
+            for(r = 0; r < table_remover.length; r++)
+                table_remover[r].remove();
+        }
+        
+        // loop through countryData's length
+        for (let i = 0; i < countryData.length; i++) {
+
+            // create tr elements for tbody in HTML
+            tr_body[i] = document.createElement('tr');
+
+            tr_body[i].className = 'tr_body';
+
+            // append the number of tr according to countryData length to tbody 
+            table_body.appendChild(tr_body[i]);
+
+            // since there are two columns, there needs to be 2 td elements
+            for (let d = 0; d < th.length; d++) {
+                td_body[d] = document.createElement('td');
+
+                // check if the first column
+                if (d == 0) 
+
+                    // insert a country's full name to a corresponding td
+                    td_body[d].innerHTML = countryData[i].countryFullName;
+                
+                // otherwise, insert the origin
+                else td_body[d].innerHTML = countryData[i].origin;
+
+                // add two td elements to one tr at a time
+                tr_body[i].appendChild(td_body[d]);
+            }
+        }
+    }
 }
 
 // Months
@@ -586,31 +712,15 @@ async function getGeolocation() {
 async function getCalendar(COUNTRY, YEAR) {
 
     ///////////////////////////////////////////
-    // this posting process is unnecessary for dealing with all the posted parameters
-    // but necessary if I want to use this method to get the API key from the server
-    // securely
-    
-    // put the data into an object
-    const data = {
-        COUNTRY,
-        YEAR
-    };
-
-    // create options for POST method
-    const options =  {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    };
+    // get a call to an endpoint from the server side using GET method
+    // to get the API key securely from there 
     ///////////////////////////////////////////
 
     // create response to the server side
-    const response = await fetch('/calendar/', options);
+    const response = await fetch('/calendar/');
     const API_KEY = await response.json();
     
-    // fetch URL using the API_KEY from the server side
+    // fetch the URL using the API_KEY from the server side
     let URL = `https://calendarific.com/api/v2/holidays?&api_key=${API_KEY}&country=${COUNTRY}&year=${YEAR}`;
     
     let calendar_response = await fetch(URL);
