@@ -422,7 +422,7 @@ function changeCountry(countryFullName, native) {
                 })
 
             // save data to the database
-            saveCountry(countryFullName, native);
+            saveCountry(countryFullName, native, searchCountry.value.toLowerCase());
         }
 
         // hide the search container
@@ -432,12 +432,13 @@ function changeCountry(countryFullName, native) {
     }
 }
 
-async function saveCountry(countryFullName, native) {
+async function saveCountry(countryFullName, native, keywords) {
 
     // create data 
     const data = {
         origin: countryInfo.country,
         countryFullName,
+        keywords,
         native
     }
 
@@ -512,14 +513,23 @@ async function searchedCountried(num) {
             for (let d = 0; d < th.length; d++) {
                 td_body[d] = document.createElement('td');
 
+                // check if the last searched country
+                if(i == 0) {
+                    td_body[d].style.color = 'lightblue';
+                }
+
                 // check if the first column
-                if (d == 0) 
+                if (d == 0) {
 
                     // insert a country's full name to a corresponding td
-                    td_body[d].innerHTML = countryData[i].countryFullName;
+                    td_body[d].innerHTML = countryData[i].countryFullName + ' ' + '(' + countryData[i].native +')';
+                } 
                 
-                // otherwise, insert the origin
-                else td_body[d].innerHTML = countryData[i].origin;
+                // or if the second one, insert the keywords
+                else if (d == 1) td_body[d].innerHTML = countryData[i].keywords;
+
+                // or if the third one, insert the origin
+                else if (d == 2) td_body[d].innerHTML = countryData[i].origin;
 
                 // add two td elements to one tr at a time
                 tr_body[i].appendChild(td_body[d]);

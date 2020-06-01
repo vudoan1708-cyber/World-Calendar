@@ -35,6 +35,18 @@ app.post('/countries/', function(request, response) {
     // create a data container
     const data = request.body;
 
+    // get the current timestamp
+    const timestamp = Date.now();
+
+    const getDate = new Date(timestamp);
+
+    // for some reason, the hours in the getDate variable is 1 hour earlier than the current ones
+    // so plus one to get the exactly hours
+    getDate.setHours(getDate.getHours() + 1);
+
+    // replace the generic timestamp with the newly created one
+    data.timestamp = getDate;
+
     // insert data to database
     database.insert(data);
 
@@ -45,7 +57,7 @@ app.post('/countries/', function(request, response) {
 app.get('/countries/', function(request, response) {
 
     // find data
-    database.find({}).sort({ countryFullName: 1 }).exec(function (err, data) {
+    database.find({}).sort({ timestamp: -1 }).exec(function (err, data) {
 
         // error handling
         if(err) {
