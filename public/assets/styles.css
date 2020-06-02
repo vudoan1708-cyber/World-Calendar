@@ -472,7 +472,6 @@ body #tabularDisplay #tabularContainer {
   max-height: 50%;
   margin: 10px auto;
   background-color: black;
-  overflow-x: hidden;
   overflow-y: scroll;
 }
 
@@ -504,6 +503,17 @@ body #tabularDisplay #tabularContainer #table tbody td {
   border: 2px solid #dee2e6;
   padding: 0.75rem;
   vertical-align: top;
+}
+
+body .err, body #support_wrapper .err {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  color: red;
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
 /* width of the entire scrollbar */

@@ -460,7 +460,7 @@ body {
             max-height: 50%;
             margin: 10px auto;
             background-color: black;
-            overflow-x: hidden;
+            // overflow-x: hidden;
             overflow-y: scroll;
 
             #table {
@@ -496,6 +496,18 @@ body {
                 }
             }
         }
+    }
+
+    // error display
+    .err {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        color: red;
+        text-align: center;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.75);
     }
 }
 

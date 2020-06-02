@@ -109,14 +109,6 @@ function init() {
             // pass data to calendarData
             .then(data => {
                 calendarData = data;
-
-                if (calendarData == undefined || calendarData == null || calendarData == '') {
-                    document.body.style.visibility = 'hidden';
-                    html.style.visibility = 'hidden';
-                } else {
-                    document.body.style.visibility = 'visible';
-                    html.style.visibility = 'visible';
-                }
             })
 
             // loop through the array and pass data to variables
@@ -135,6 +127,9 @@ function init() {
             // catch error
             .catch(err => {
                 console.log(err);
+
+                // error handling
+                errorCatched(err);
             })
         
         // otherwise
@@ -148,6 +143,41 @@ function init() {
 }
 
 init();
+
+function errorCatched(err) {
+
+    // hide the entire canvas that contains the month display, country name,...
+    canvas.style.visibility = 'hidden';
+    country.style.visibility = 'hidden';
+    yearHTML = document.getElementById('chosenYear').style.visibility = 'hidden';
+    backYear.style.visibility = 'hidden';
+    forwardYear.style.visibility = 'hidden';
+
+    // create a div for error display
+    const errorDisplay = document.createElement('div');
+
+    // if there is an error
+    if (err) {   
+        errorDisplay.className = 'err';
+        errorDisplay.innerHTML = 'Error while loading APIs' + '\n' + 'Please Try Refreshing The Website'
+
+        // append the created element to the body tag
+        document.body.appendChild(errorDisplay);
+
+    // otherwise
+    } else {
+
+        // remove the created element from the body tag
+        document.body.removeChild(errorDisplay);
+
+        // show the entire canvas that contains the month display, country name,...
+        canvas.style.visibility = 'hidden';
+        country.style.visibility = 'hidden';
+        yearHTML = document.getElementById('chosenYear').style.visibility = 'hidden';
+        backYear.style.visibility = 'hidden';
+        forwardYear.style.visibility = 'hidden';
+    }
+}
  
 // get the previous year
 function prevYear() {
@@ -198,6 +228,14 @@ function prevYear() {
                 descriptions[i] = calendarData.response.holidays[i].description;
             }
         }
+    })
+
+    // catch error
+    .catch(err => {
+        console.log(err);
+
+        // error handling
+        errorCatched(err);
     })
     return yearHTML;
 }
@@ -250,6 +288,14 @@ function nextYear() {
                 descriptions[i] = calendarData.response.holidays[i].description;
             }
         }
+    })
+
+    // catch error
+    .catch(err => {
+        console.log(err);
+
+        // error handling
+        errorCatched(err);
     })
     return yearHTML;
 }
@@ -421,8 +467,15 @@ function changeCountry(countryFullName, native) {
                     }
                 })
 
-            // save data to the database
-            saveCountry(countryFullName, native, searchCountry.value.toLowerCase());
+                .then(() => {
+                    // save data to the database
+                    saveCountry(countryFullName, native, searchCountry.value.toLowerCase());
+                })
+            
+                .catch(err => {
+                    console.error(err);
+                    errorCatched(err);
+                })
         }
 
         // hide the search container
