@@ -93,53 +93,73 @@ function init() {
 
     // start by geolocating user's location
     getGeolocation()
-    .then(() => {
-        loading = false;
-    })
 
-    // wait for a second and then, get data from the API
-    .then(setTimeout(() => {
+        // check if the API is still pending to load data
+        .then(() => {
+            if (loading) {
 
-        // if loading is done and lat, lon values are true
-        if (!loading && lat && lon) {
-            
-            // trigger the below function with country identified through geolocation, and current year
-            getCalendar(countryInfo.prov, yearHTML)
+                // get country's name where user is at and insert it into HTML div tag
+                country.textContent = 'Loading....';
+            }
+            loading = false;
+        })
 
-            // pass data to calendarData
-            .then(data => {
-                calendarData = data;
-            })
+        // wait for a second and then, get data from the API
+        .then(setTimeout(() => {
 
-            // loop through the array and pass data to variables
-            .then(() => {
-                for (let i = 0; i < calendarData.response.holidays.length; i++) {
+            // if loading is done and lat, lon values are true
+            if (lat && lon) {
+                
+                // check if countryInfo is not a null object
+                if (countryInfo == null) {
 
-                    // pass data into the variable
-                    holidays[i] = calendarData.response.holidays[i].name;
-                    months[i] = calendarData.response.holidays[i].date.datetime.month;
-                    days[i] = calendarData.response.holidays[i].date.datetime.day;
-                    dates[i] = calendarData.response.holidays[i].date.iso;
-                    descriptions[i] = calendarData.response.holidays[i].description;
+                    // start the workflow again
+                    init();
                 }
-            })
 
-            // catch error
-            .catch(err => {
-                console.log(err);
+                // otherwise
+                else {
+                    // trigger the below function with country identified through geolocation, and current year
+                    getCalendar(countryInfo.prov, yearHTML)
 
-                // error handling
-                errorCatched(err);
-            })
-        
-        // otherwise
-        } else if (!lat && !lon) {
+                    // pass data to calendarData
+                    .then(data => {
+                        calendarData = data;
 
-            // wait for one second and call the init function again
-            // if user has yet given permission for geolocation
-            setTimeout(init, 1000);
-        }
-    }, 1000))
+                        // get country's name where user is at and insert it into HTML div tag
+                        country.textContent = countryInfo.country;
+                    })
+
+                    // loop through the array and pass data to variables
+                    .then(() => {
+                        for (let i = 0; i < calendarData.response.holidays.length; i++) {
+
+                            // pass data into the variable
+                            holidays[i] = calendarData.response.holidays[i].name;
+                            months[i] = calendarData.response.holidays[i].date.datetime.month;
+                            days[i] = calendarData.response.holidays[i].date.datetime.day;
+                            dates[i] = calendarData.response.holidays[i].date.iso;
+                            descriptions[i] = calendarData.response.holidays[i].description;
+                        }
+                    })
+
+                    // catch error
+                    .catch(err => {
+                        console.log(err);
+
+                        // error handling
+                        errorCatched(err);
+                    })
+                }
+            
+            // otherwise
+            } else if (!lat && !lon) {
+
+                // wait for one second and call the init function again
+                // if user has yet given permission for geolocation
+                setTimeout(init, 1000);
+            }
+        }, 1000))
 }
 
 init();
@@ -159,7 +179,7 @@ function errorCatched(err) {
     // if there is an error
     if (err) {   
         errorDisplay.className = 'err';
-        errorDisplay.innerHTML = 'Error while loading APIs' + '\n' + 'Please Try Refreshing The Website'
+        errorDisplay.innerHTML = 'Error while loading APIs' + '</br>' + 'Please Try Refreshing The Website'
 
         // append the created element to the body tag
         document.body.appendChild(errorDisplay);
@@ -171,11 +191,11 @@ function errorCatched(err) {
         document.body.removeChild(errorDisplay);
 
         // show the entire canvas that contains the month display, country name,...
-        canvas.style.visibility = 'hidden';
-        country.style.visibility = 'hidden';
-        yearHTML = document.getElementById('chosenYear').style.visibility = 'hidden';
-        backYear.style.visibility = 'hidden';
-        forwardYear.style.visibility = 'hidden';
+        canvas.style.visibility = 'visible';
+        country.style.visibility = 'visible';
+        yearHTML = document.getElementById('chosenYear').style.visibility = 'visible';
+        backYear.style.visibility = 'visible';
+        forwardYear.style.visibility = 'visible';
     }
 }
  
@@ -265,6 +285,7 @@ function nextYear() {
 
     // loop through the array and pass data to variables
     .then(() => {
+        
         // check if the year is available
         if (calendarData.response.holidays == undefined) {
 
@@ -760,14 +781,18 @@ async function recordPosition(position) {
     const URL = `https://geocode.xyz/${lat},${lon}?geoit=json`;
     const request = await fetch(URL);
     countryInfo = await request.json();
+    return countryInfo;
+}
 
-    // get country's name where user is at and insert it into HTML div tag
-    country.textContent = countryInfo.country;
+function error(err) {
+    
+    // error handling
+    errorCatched(err);
 }
 
 async function getGeolocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(recordPosition);
+        navigator.geolocation.getCurrentPosition(recordPosition, error);
     }
 }
 
