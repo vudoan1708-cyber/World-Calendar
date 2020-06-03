@@ -549,18 +549,26 @@ async function searchedCountries(num) {
         // refresh some arrays
         searched_countries = [];
         most_searched = [];
+        counter = [];
 
         // get all the HTML elements with a class name of most
-        let most_remover = document.querySelectorAll('.most');
+        let most_remover = document.querySelectorAll('.most'),
+            counter_remover = document.querySelectorAll('.counter');
 
         // check if there are any of them on the HTML
-        if (most_remover.length != 0) {
+        if (most_remover.length != 0 && counter_remover.length != 0) {
             
             // loop through the length of array that contains all of them
-            for (let r = 0; r < most_remover.length; r++)
+            for (let mr = 0; mr < most_remover.length; mr++)
 
                 // remove them one by one
-                most_remover[r].remove();
+                most_remover[mr].remove();
+
+            // loop through the length of array that contains all of them
+            for (let cr = 0; cr < counter_remover.length; cr++)
+
+                // remove them one by one
+                counter_remover[cr].remove();
         }
     } else {
         tabularDisplay.style.visibility = 'visible';
@@ -664,7 +672,7 @@ async function searchedCountries(num) {
                     counter[c].innerHTML = count;
 
                     // append to the table as a child element
-                    mostSearched.appendChild(most_searched[c], counter[c]);
+                    mostSearched.appendChild(most_searched[c]);
                     mostSearched.appendChild(counter[c]);
                 }
             
@@ -697,7 +705,7 @@ async function searchedCountries(num) {
                     counter[c].innerHTML = count;
 
                     // append to the table as a child element
-                    mostSearched.appendChild(most_searched[c], counter[c]);
+                    mostSearched.appendChild(most_searched[c]);
                     mostSearched.appendChild(counter[c]);
                 }
             }
