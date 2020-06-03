@@ -505,6 +505,34 @@ body #tabularDisplay #tabularContainer #table tbody td {
   vertical-align: top;
 }
 
+body #tabularDisplay #mostSearched {
+  position: relative;
+  width: 50%;
+  margin: 5px auto;
+  text-align: center;
+  background-color: rgba(16, 15, 15, 0.364);
+}
+
+body #tabularDisplay #mostSearched .most {
+  position: relative;
+  float: left;
+  clear: left;
+  padding: 10px;
+  width: 50%;
+  text-align: left;
+  color: #68877b;
+}
+
+body #tabularDisplay #mostSearched .counter {
+  position: relative;
+  float: right;
+  clear: right;
+  padding: 10px;
+  width: 50%;
+  text-align: right;
+  color: #68877b;
+}
+
 body .err, body #support_wrapper .err {
   position: absolute;
   top: 50%;

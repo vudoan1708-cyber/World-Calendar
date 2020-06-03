@@ -84,6 +84,7 @@ const jan = document.getElementById('jan'),
       tabularDisplay = document.getElementById('tabularDisplay');
       table_body = document.getElementById('table_body');
       tableBtn = document.getElementById('tableBtn');
+      mostSearched = document.getElementById('mostSearched');
 
 
 // this function is meant to not ask for any API call until user permits location access
@@ -539,11 +540,28 @@ async function saveCountry(countryFullName, native, keywords) {
     }
 }
 
-async function searchedCountried(num) {
+async function searchedCountries(num) {
 
     if (num == 1) {
         tabularDisplay.style.visibility = 'hidden';
         tabularDisplay.style.opacity = 0;
+
+        // refresh some arrays
+        searched_countries = [];
+        most_searched = [];
+
+        // get all the HTML elements with a class name of most
+        let most_remover = document.querySelectorAll('.most');
+
+        // check if there are any of them on the HTML
+        if (most_remover.length != 0) {
+            
+            // loop through the length of array that contains all of them
+            for (let r = 0; r < most_remover.length; r++)
+
+                // remove them one by one
+                most_remover[r].remove();
+        }
     } else {
         tabularDisplay.style.visibility = 'visible';
         tabularDisplay.style.opacity = 1;
@@ -554,9 +572,17 @@ async function searchedCountried(num) {
         // assign the response to a global variable in JSON format
         countryData = await response.json();
 
-        // create an array that holds the number of tr and td elements
+        // create an array that holds the number of tr and td elements, all the searched countries
+        // the most searched ones, and counter as HTML elements
         let tr_body = [],
-            td_body = [];
+            td_body = [],
+            searched_countries = [],
+            most_searched = [],
+            counter = [];
+
+        // variables to count duplicated countries from the database
+        let current = null;
+        let count = 0;
 
         // get total number of th elements from HTML
         let th = document.querySelectorAll('th');
@@ -565,15 +591,18 @@ async function searchedCountried(num) {
         let table_remover = document.querySelectorAll('.tr_body');
 
         // check if there are any one of them
-        if(table_remover.length != 0) {
+        if (table_remover.length != 0) {
 
             // loop through the length of the array
-            for(r = 0; r < table_remover.length; r++)
+            for (r = 0; r < table_remover.length; r++)
                 table_remover[r].remove();
         }
         
         // loop through countryData's length
         for (let i = 0; i < countryData.length; i++) {
+
+            // insert all the countries name into this array
+            searched_countries[i] = countryData[i].countryFullName;
 
             // create tr elements for tbody in HTML
             tr_body[i] = document.createElement('tr');
@@ -583,7 +612,7 @@ async function searchedCountried(num) {
             // append the number of tr according to countryData length to tbody 
             table_body.appendChild(tr_body[i]);
 
-            // since there are two columns, there needs to be 2 td elements
+            // since there are three columns, there needs to be 3 td elements
             for (let d = 0; d < th.length; d++) {
                 td_body[d] = document.createElement('td');
 
@@ -607,6 +636,70 @@ async function searchedCountried(num) {
 
                 // add two td elements to one tr at a time
                 tr_body[i].appendChild(td_body[d]);
+            }
+        }
+
+        // sort the searchedCountries array
+        searched_countries.sort();
+
+        // loop through it
+        for (c = 0; c < searched_countries.length; c++) {
+
+            // check if current is not equal any searched countries element
+            if (current != searched_countries[c]) {
+            
+                // check if the there are same elements before reassigning a new one
+                if (count > 1) {
+
+                    most_searched[c] = document.createElement('div');
+
+                    counter[c] = document.createElement('div');
+
+                    most_searched[c].className = 'most';
+
+                    counter[c].className = 'counter';
+
+                    most_searched[c].innerHTML = current;
+
+                    counter[c].innerHTML = count;
+
+                    // append to the table as a child element
+                    mostSearched.appendChild(most_searched[c], counter[c]);
+                    mostSearched.appendChild(counter[c]);
+                }
+            
+                // assign the element to current
+                current = searched_countries[c]; 
+            
+                // assign the counter to 1
+                count = 1;
+            }
+            
+            // otherwise
+            else {
+            
+                // count up the counter
+                count++;
+                
+                // check the last element of the array
+                if (c == searched_countries.length - 1) {
+
+                    most_searched[c] = document.createElement('div');
+
+                    counter[c] = document.createElement('div');
+
+                    most_searched[c].className = 'most';
+
+                    counter[c].className = 'counter';
+
+                    most_searched[c].innerHTML = current;
+
+                    counter[c].innerHTML = count;
+
+                    // append to the table as a child element
+                    mostSearched.appendChild(most_searched[c], counter[c]);
+                    mostSearched.appendChild(counter[c]);
+                }
             }
         }
     }

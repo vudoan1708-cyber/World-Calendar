@@ -496,6 +496,34 @@ body {
                 }
             }
         }
+
+        #mostSearched {
+            position: relative;
+            width: 50%;
+            margin: 5px auto;
+            text-align: center;
+            background-color: map-get($bg-color, secondary);
+
+            .most {
+                position: relative;
+                float: left;
+                clear: left;
+                padding: 10px;
+                width: 50%;
+                text-align: left;
+                color: map-get($bg-color, primary);
+            }
+
+            .counter {
+                position: relative;
+                float: right;
+                clear: right;
+                padding: 10px;
+                width: 50%;
+                text-align: right;
+                color: map-get($bg-color, primary);
+            }
+        }
     }
 
     // error display
