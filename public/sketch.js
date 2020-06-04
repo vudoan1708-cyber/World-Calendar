@@ -120,15 +120,16 @@ function init() {
 
                 // otherwise
                 else {
+                    
                     // trigger the below function with country identified through geolocation, and current year
-                    getCalendar(countryInfo.prov, yearHTML)
+                    getCalendar(countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name, yearHTML)
 
                     // pass data to calendarData
                     .then(data => {
                         calendarData = data;
 
                         // get country's name where user is at and insert it into HTML div tag
-                        country.textContent = countryInfo.country;
+                        country.textContent = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name;
                     })
 
                     // loop through the array and pass data to variables
@@ -216,7 +217,7 @@ function prevYear() {
 
     // reload the api
     // pass data to get either the search value if applicable, or the original value from html
-    getCalendar(searchCountry.value || countryInfo.prov, yearHTML)
+    getCalendar(searchCountry.value || countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name, yearHTML)
             
     // pass data to calendarData
     .then(data => {
@@ -277,7 +278,7 @@ function nextYear() {
 
    // reload the api
     // pass data to get either the search value if applicable, or the original value from html
-    getCalendar(searchCountry.value || countryInfo.prov, yearHTML)
+    getCalendar(searchCountry.value || countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name, yearHTML)
             
     // pass data to calendarData
     .then(data => {
@@ -490,6 +491,7 @@ function changeCountry(countryFullName, native) {
                 })
 
                 .then(() => {
+
                     // save data to the database
                     saveCountry(countryFullName, native, searchCountry.value.toLowerCase());
                 })
@@ -511,7 +513,7 @@ async function saveCountry(countryFullName, native, keywords) {
 
     // create data 
     const data = {
-        origin: countryInfo.country,
+        origin: countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name,
         countryFullName,
         keywords,
         native
@@ -527,7 +529,9 @@ async function saveCountry(countryFullName, native, keywords) {
     }
 
     // check if original geolocation is not available
-    if (countryInfo.country == null || countryInfo.country == undefined || countryInfo.country == '') {
+    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name == null || 
+        countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name == undefined || 
+        countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name == '') {
         getGeolocation();
     } else  {
 
@@ -874,13 +878,27 @@ function getMonth(nMonth, incrementMonth) {
 }
 
 async function recordPosition(position) {
+
+    ///////////////////////////////////////////
+    // get a call to an endpoint from the server side using GET method
+    // to get the API key securely from there 
+    ///////////////////////////////////////////
+    const response = await fetch('/maps/');
+    const MAPS_API_KEY = await response.json();
     
     // get the latitude and longitude at user's location
     lat = position.coords.latitude;
     lon = position.coords.longitude;
 
-    const URL = `https://geocode.xyz/${lat},${lon}?geoit=json`;
-    const request = await fetch(URL);
+    // const URL = `https://geocode.xyz/${lat},${lon}?geoit=json`;
+    const URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${MAPS_API_KEY}`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Accept-Language': '*'
+        }
+    }
+    const request = await fetch(URL, options);
     countryInfo = await request.json();
     return countryInfo;
 }
@@ -892,9 +910,9 @@ function error(err) {
 }
 
 async function getGeolocation() {
-    if (navigator.geolocation) {
+    if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(recordPosition, error);
-    }
+    } else console.log("geolocation is not available");
 }
 
 

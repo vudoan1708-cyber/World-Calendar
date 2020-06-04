@@ -3,6 +3,7 @@ const app = express(); // setup express
 const port = process.env.PORT || 5000;
 const Datastore = require('nedb'); // create database object from nedb
 const database = new Datastore('database/countries.db');
+
 database.loadDatabase(); // create a database file
 
 require('dotenv').config(); // create a config for dotenv
@@ -14,17 +15,18 @@ server.listen(port, () => { console.log('listening at port ' + port) });
 app.use(express.static('public')) // setup root directory
 app.use(express.json({ limit: '1mb' }));
 
-app.use(function(req, res, next) {
+app.all(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type");
+    res.header("Accept-Language", "*");
     next()
 });
 
 app.get('/calendar/', function (request, response) {
 
     // do it this way so that the API key will be secured
-    const API_KEY = process.env.API_KEY || process.env.API_KEY_EXTRA;
+    const API_KEY = process.env.API_KEY_EXTRA2 || process.env.API_KEY || process.env.API_KEY_EXTRA;
 
     // create a response to the client side
     response.json(API_KEY);
@@ -66,4 +68,13 @@ app.get('/countries/', function(request, response) {
             return;
         } else response.json(data);
     })
+});
+
+app.get('/maps/', function (request, response) {
+
+    // do it this way so that the API key will be secured
+    const MAPS_API_KEY = process.env.MAPS_API_KEY;
+
+    // create a response to the client side
+    response.json(MAPS_API_KEY);
 });
