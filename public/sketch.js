@@ -120,16 +120,31 @@ function init() {
 
                 // otherwise
                 else {
-                    
+                    let countryCode,
+                        countryLongName;
+
+                    // check if the types of result is country, because postal codes don't exist in some countries
+                    // therefore, the last array element is instead a country type, rather than postal code type
+                    // from there, the second last array element is administrative area level which causes error
+                    // and in fact, the last element for the results of these countries will end up the last
+                    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].types[0] == 'country') {
+                        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name;
+                        countryLongName = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name;
+                    }
+                    else {
+                        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].short_name;
+                        countryLongName = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].long_name;
+                    }
+
                     // trigger the below function with country identified through geolocation, and current year
-                    getCalendar(countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name, yearHTML)
+                    getCalendar(countryCode, yearHTML)
 
                     // pass data to calendarData
                     .then(data => {
                         calendarData = data;
 
                         // get country's name where user is at and insert it into HTML div tag
-                        country.textContent = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name;
+                        country.textContent = countryLongName;
                     })
 
                     // loop through the array and pass data to variables
@@ -215,9 +230,19 @@ function prevYear() {
     yearHTML--;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
 
+    let countryCode;
+
+    // check if the types of result is country, because postal codes don't exist in some countries
+    // therefore, the last array element is instead a country type, rather than postal code type
+    // from there, the second last array element is administrative area level which causes error
+    // and in fact, the last element for the results of these countries will end up the last
+    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].types[0] == 'country')
+        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name;
+    else countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].short_name;
+    
     // reload the api
     // pass data to get either the search value if applicable, or the original value from html
-    getCalendar(searchCountry.value || countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name, yearHTML)
+    getCalendar(countryCode, yearHTML)
             
     // pass data to calendarData
     .then(data => {
@@ -276,9 +301,19 @@ function nextYear() {
     yearHTML++;
     yearHTML = document.getElementById('chosenYear').innerHTML = yearHTML;
 
+    let countryCode;
+
+    // check if the types of result is country, because postal codes don't exist in some countries
+    // therefore, the last array element is instead a country type, rather than postal code type
+    // from there, the second last array element is administrative area level which causes error
+    // and in fact, the last element for the results of these countries will end up the last
+    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].types[0] == 'country')
+        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name;
+    else countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].short_name;
+
    // reload the api
     // pass data to get either the search value if applicable, or the original value from html
-    getCalendar(searchCountry.value || countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name, yearHTML)
+    getCalendar(searchCountry.value || countryCode, yearHTML)
             
     // pass data to calendarData
     .then(data => {
