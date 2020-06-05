@@ -892,6 +892,8 @@ async function recordPosition(position) {
 
     // const URL = `https://geocode.xyz/${lat},${lon}?geoit=json`;
     const URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${MAPS_API_KEY}`;
+
+    // create options for accept-language in GET method
     const options = {
         method: 'GET',
         headers: {
@@ -929,8 +931,15 @@ async function getCalendar(COUNTRY, YEAR) {
     
     // fetch the URL using the API_KEY from the server side
     let URL = `https://calendarific.com/api/v2/holidays?&api_key=${API_KEY}&country=${COUNTRY}&year=${YEAR}`;
-    
-    let calendar_response = await fetch(URL);
+
+    // create options for accept-language in GET method
+    const options = {
+        method: 'GET',
+        headers: {
+            'Accept-Language': '*'
+        }
+    }
+    let calendar_response = await fetch(URL, options);
     calendarData = await calendar_response.json();
     return calendarData;
 } 
