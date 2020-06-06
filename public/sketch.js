@@ -965,19 +965,19 @@ async function getCalendar(COUNTRY, YEAR) {
 } 
 
 // visualise the most searched countries with chart.js
-function chartData(xLab, yLab) {
+function chartData(xLab, percentage) {
     new Chart(mostSearched, {
         type: 'pie',
         data: {
             labels: xLab,
             datasets: [{
                 label: 'Most Searched Countries',
-                data: yLab,
+                data: percentage,
 
                 // apply different background colour depending on number of data
                 backgroundColor: function (context) {
-                    let index = context.dataIndex;
-                    let val = context.dataset.data[index];
+                    let index = context.dataIndex,
+                        val = context.dataset.data[index];
                     
                     // if val < 4, draw red-ish
                     return val < 4 ? 'rgba(255, 99, 132, 0.2)' :
@@ -989,24 +989,53 @@ function chartData(xLab, yLab) {
                         'rgba(255, 206, 86, 0.2)'
                 },
                 borderColor: function (context) {
-                    let index = context.dataIndex;
-                    let val = context.dataset.data[index];
+                    let index = context.dataIndex,
+                        val = context.dataset.data[index],
+                        alpha = 0.25;
                     
                     // if val < 4, draw red-ish
-                    return val < 4 ? 'rgba(255, 99, 132, 0.2)' :
+                    return val < 4 ? 'rgba(255, 99, 132, ' + alpha + ')' :
 
                         // else if val > 4, draw blue-ish
-                        val > 4 ? 'rgba(54, 162, 235, 0.2)' :
+                        val > 4 ? 'rgba(54, 162, 235, ' + alpha + ')' :
 
                         // otherwise
-                        'rgba(255, 206, 86, 0.2)'
+                        'rgba(255, 206, 86, ' + alpha + ')'
+                },
+                hoverBackgroundColor: function (context) {
+                    let index = context.dataIndex,
+                        val = context.dataset.data[index],
+                        alpha = 0.75;
+                    
+                    // if val < 4, draw red-ish
+                    return val < 4 ? 'rgba(255, 99, 132, ' + alpha + ')' :
+
+                        // else if val > 4, draw blue-ish
+                        val > 4 ? 'rgba(54, 162, 235, ' + alpha + ')' :
+
+                        // otherwise
+                        'rgba(255, 206, 86, ' + alpha + ')'
                 },
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0,
+                    top: 10,
+                    bottom: 10
+                }
+            },
+            legend: {
+                display: true,
+                labels: {
+                    align: 'center'
+                }
+            }
         }
     });
 }
