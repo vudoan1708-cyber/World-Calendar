@@ -52,6 +52,8 @@ const jan = document.getElementById('jan'),
       // prevMonth button
       backMonth = document.getElementById('backMonth');
 
+      monthsContainer = document.getElementById('months');
+
       // nextMonth button
       forwardMonth = document.getElementById('forwardMonth');
 
@@ -378,6 +380,9 @@ function goBack() {
     // hide back arrow button
     backBtn.style.visibility = 'hidden';
 
+    // hide monthsContainer
+    monthsContainer.style.display = 'none';
+
     // hide displayMonths container
     displayMonths.style.opacity = 0;
 
@@ -585,11 +590,6 @@ async function searchedCountries(num) {
         tabularDisplay.style.visibility = 'hidden';
         tabularDisplay.style.opacity = 0;
 
-        // refresh some arrays
-        searched_countries = [];
-        most_searched = [];
-        counter = [];
-
         // get all the HTML elements with a class name of most
         let most_remover = document.querySelectorAll('.most'),
             counter_remover = document.querySelectorAll('.counter');
@@ -620,7 +620,7 @@ async function searchedCountries(num) {
         countryData = await response.json();
 
         // create an array that holds the number of tr and td elements, all the searched countries
-        // the most searched ones, and counter as HTML elements
+        // the most searched ones, and counter as chart.js elements
         let tr_body = [],
             td_body = [],
             searched_countries = [],
@@ -698,21 +698,11 @@ async function searchedCountries(num) {
                 // check if the there are same elements before reassigning a new one
                 if (count > 1) {
 
-                    most_searched[c] = document.createElement('div');
-
-                    counter[c] = document.createElement('div');
-
-                    most_searched[c].className = 'most';
-
-                    counter[c].className = 'counter';
-
-                    most_searched[c].innerHTML = current;
-
-                    counter[c].innerHTML = count;
-
-                    // append to the table as a child element
-                    mostSearched.appendChild(most_searched[c]);
-                    mostSearched.appendChild(counter[c]);
+                    // append countries with the highest searched times to most_searched
+                    // and the counts to counter
+                    // to visualise data using chart.js 
+                    most_searched.push(current);
+                    counter.push(count);
                 }
             
                 // assign the element to current
@@ -731,24 +721,16 @@ async function searchedCountries(num) {
                 // check the last element of the array
                 if (c == searched_countries.length - 1) {
 
-                    most_searched[c] = document.createElement('div');
-
-                    counter[c] = document.createElement('div');
-
-                    most_searched[c].className = 'most';
-
-                    counter[c].className = 'counter';
-
-                    most_searched[c].innerHTML = current;
-
-                    counter[c].innerHTML = count;
-
-                    // append to the table as a child element
-                    mostSearched.appendChild(most_searched[c]);
-                    mostSearched.appendChild(counter[c]);
+                    // append countries with the highest searched times to most_searched
+                    // and the counts to counter
+                    // to visualise data using chart.js 
+                    most_searched.push(current);
+                    counter.push(count);
                 }
             }
         }
+
+        chartData(most_searched, counter);
     }
 }
 
@@ -809,6 +791,9 @@ function getMonth(nMonth, incrementMonth) {
 
     // show displayMonth
     displayMonths.style.visibility = 'visible';
+
+    // show monthsContainer
+    monthsContainer.style.display = 'block';
 
     // show chosenMonth
     chosenMonth.style.display = 'block';
@@ -978,3 +963,50 @@ async function getCalendar(COUNTRY, YEAR) {
     calendarData = await calendar_response.json();
     return calendarData;
 } 
+
+// visualise the most searched countries with chart.js
+function chartData(xLab, yLab) {
+    new Chart(mostSearched, {
+        type: 'pie',
+        data: {
+            labels: xLab,
+            datasets: [{
+                label: 'Most Searched Countries',
+                data: yLab,
+
+                // apply different background colour depending on number of data
+                backgroundColor: function (context) {
+                    let index = context.dataIndex;
+                    let val = context.dataset.data[index];
+                    
+                    // if val < 4, draw red-ish
+                    return val < 4 ? 'rgba(255, 99, 132, 0.2)' :
+
+                        // else if val > 4, draw blue-ish
+                        val > 4 ? 'rgba(54, 162, 235, 0.2)' :
+
+                        // otherwise
+                        'rgba(255, 206, 86, 0.2)'
+                },
+                borderColor: function (context) {
+                    let index = context.dataIndex;
+                    let val = context.dataset.data[index];
+                    
+                    // if val < 4, draw red-ish
+                    return val < 4 ? 'rgba(255, 99, 132, 0.2)' :
+
+                        // else if val > 4, draw blue-ish
+                        val > 4 ? 'rgba(54, 162, 235, 0.2)' :
+
+                        // otherwise
+                        'rgba(255, 206, 86, 0.2)'
+                },
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}

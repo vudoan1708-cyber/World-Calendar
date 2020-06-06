@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="assets/styles.css">
     <link rel="shortcut icon" href="assets/img/icon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <title>World Holidays</title>
 </head>
 <body>
@@ -63,24 +64,24 @@
     </div>
 
     <!-- display a choosen month -->
-    <div id="months">
+    <div id="months" role="month container">
         <p id="chosenMonth"></p>
         <button id="backMonth" class="monBtns" onclick="getMonth(currentMonth, -1)"><<<</button>
         <button id="forwardMonth" class="monBtns" onclick="getMonth(currentMonth, 1)">>>></button>
     </div>
 
     <!-- holiday information -->
-    <div id="info_container">
+    <div id="info_container" role="container">
         
     </div>
 
     <!-- holiday description -->
-    <div id="description">
+    <div id="description" role="description container">
         Click/Press on one of the holidays above to see its detailed descriptions
     </div>
 
     <!-- back arrow button -->
-    <div id="backBtn" onclick="goBack()">
+    <div id="backBtn" onclick="goBack()" role="button">
         <img id="backArrow" src="assets/img/left_arrow.png" alt="A Back Arrow Button">
     </div>
 
@@ -134,10 +135,17 @@
     
                 </tbody>
             </table>
-            <div id="mostSearched" role="contains most searched countries">
-                <h3 style="margin: 20px 0; color: white; text-align: left;">Most Searched Countries</h3>
 
+            <div id="mostWrapper" role="wrapper">
+                <h3 id="most">Most Searched Countries</h4>
+                <div id="chartContainer" role="container">
+                    <canvas id="mostSearched">
+    
+                    </canvas>
+                </div>
             </div>
+            
+            
         </div>
         <div id="close_tabularDisplay" role="button" onclick="searchedCountries(1)">X</div>
     </div>

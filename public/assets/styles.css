@@ -135,11 +135,11 @@ body #displayMonths {
   white-space: nowrap;
   overflow-x: scroll;
   overflow-y: hidden;
-  -webkit-transition: 0.5s ease-in-out;
-  transition: 0.5s ease-in-out;
-  -moz-transition: 0.5s ease-in-out;
-  -ms-transition: 0.5s ease-in-out;
-  -o-transition: 0.5s ease-in-out;
+  -webkit-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -ms-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
 }
 
 body #displayMonths .li_Months {
@@ -156,11 +156,17 @@ body #displayMonths .li_Months {
 }
 
 body #months {
+  display: none;
   position: absolute;
   text-align: center;
   width: 100%;
   bottom: 70%;
   color: white;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+  -moz-transition: 0.1s ease-in-out;
+  -ms-transition: 0.1s ease-in-out;
+  -o-transition: 0.1s ease-in-out;
 }
 
 body #months .monBtns {
@@ -367,11 +373,11 @@ body #backBtn #backArrow {
   width: 15%;
   height: auto;
   border-radius: 10px;
-  -webkit-transition: 0.5s ease-in-out;
-  transition: 0.5s ease-in-out;
-  -moz-transition: 0.5s ease-in-out;
-  -ms-transition: 0.5s ease-in-out;
-  -o-transition: 0.5s ease-in-out;
+  -webkit-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -ms-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
 }
 
 body #backBtn #backArrow:hover {
@@ -505,32 +511,31 @@ body #tabularDisplay #tabularContainer #table tbody td {
   vertical-align: top;
 }
 
-body #tabularDisplay #mostSearched {
+body #tabularDisplay #mostWrapper {
   position: relative;
-  width: 50%;
+  text-align: center;
+  width: 100%;
+  margin: 20px auto;
+}
+
+body #tabularDisplay #mostWrapper #most {
+  margin: 20px;
+  text-align: left;
+  color: white;
+}
+
+body #tabularDisplay #mostWrapper #chartContainer {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: 50%;
+}
+
+body #tabularDisplay #mostWrapper #chartContainer #mostSearched {
+  position: relative;
   margin: 5px auto;
   text-align: center;
   background-color: rgba(16, 15, 15, 0.364);
-}
-
-body #tabularDisplay #mostSearched .most {
-  position: relative;
-  float: left;
-  clear: left;
-  padding: 10px;
-  width: 50%;
-  text-align: left;
-  color: #68877b;
-}
-
-body #tabularDisplay #mostSearched .counter {
-  position: relative;
-  float: right;
-  clear: right;
-  padding: 10px;
-  width: 50%;
-  text-align: right;
-  color: #68877b;
 }
 
 body .err, body #support_wrapper .err {
