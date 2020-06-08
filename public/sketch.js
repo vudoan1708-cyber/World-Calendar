@@ -25,6 +25,8 @@ let chosenMonth = document.getElementById('chosenMonth');
 // boolean
 let loading = true;
 
+let myChart;
+
 const jan = document.getElementById('jan'),
       feb = document.getElementById('feb'),
       mar = document.getElementById('mar'),
@@ -598,6 +600,11 @@ async function saveCountry(countryFullName, native, keywords) {
 async function searchedCountries(num) {
 
     if (num == 1) {
+
+        // destroy the chart to avoid glitchy effects
+        // from overlaying charts created by creating instances of charts 
+        // everytime a button is pressed
+        chartData(null, null, num);
         tabularDisplay.style.visibility = 'hidden';
         tabularDisplay.style.opacity = 0;
 
@@ -672,11 +679,11 @@ async function searchedCountries(num) {
             }
         }
 
-        handleData(searched_countries);
+        handleData(searched_countries, num);
     }
 }
 
-function handleData(searched_countries) {
+function handleData(searched_countries, num) {
 
     let most_searched = [],
         counter = [];
@@ -728,7 +735,7 @@ function handleData(searched_countries) {
             }
         }
     }
-    chartData(most_searched, counter);
+    chartData(most_searched, counter, num);
 }
 
 // Months
@@ -962,77 +969,83 @@ async function getCalendar(COUNTRY, YEAR) {
 } 
 
 // visualise the most searched countries with chart.js
-function chartData(xLab, percentage) {
-    new Chart(mostSearched, {
-        type: 'pie',
-        data: {
-            labels: xLab,
-            datasets: [{
-                label: 'Most Searched Countries',
-                data: percentage,
+function chartData(xLab, percentage, num) {
 
-                // apply different background colour depending on number of data
-                backgroundColor: function (context) {
-                    let index = context.dataIndex,
-                        val = context.dataset.data[index];
-                    
-                    // if val < 4, draw red-ish
-                    return val < 4 ? 'rgba(255, 99, 132, 0.2)' :
-
-                        // else if val > 4, draw blue-ish
-                        val > 4 ? 'rgba(54, 162, 235, 0.2)' :
-
-                        // otherwise
-                        'rgba(255, 206, 86, 0.2)'
-                },
-                borderColor: function (context) {
-                    let index = context.dataIndex,
-                        val = context.dataset.data[index],
-                        alpha = 0.25;
-                    
-                    // if val < 4, draw red-ish
-                    return val < 4 ? 'rgba(255, 99, 132, ' + alpha + ')' :
-
-                        // else if val > 4, draw blue-ish
-                        val > 4 ? 'rgba(54, 162, 235, ' + alpha + ')' :
-
-                        // otherwise
-                        'rgba(255, 206, 86, ' + alpha + ')'
-                },
-                hoverBackgroundColor: function (context) {
-                    let index = context.dataIndex,
-                        val = context.dataset.data[index],
-                        alpha = 0.75;
-                    
-                    // if val < 4, draw red-ish
-                    return val < 4 ? 'rgba(255, 99, 132, ' + alpha + ')' :
-
-                        // else if val > 4, draw blue-ish
-                        val > 4 ? 'rgba(54, 162, 235, ' + alpha + ')' :
-
-                        // otherwise
-                        'rgba(255, 206, 86, ' + alpha + ')'
-                },
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 10,
-                    bottom: 10
-                }
+    // delete the chart
+    if (num == 1) {
+        myChart.destroy();
+    } else {
+        myChart = new Chart(mostSearched, {
+            type: 'pie',
+            data: {
+                labels: xLab,
+                datasets: [{
+                    label: 'Most Searched Countries',
+                    data: percentage,
+    
+                    // apply different background colour depending on number of data
+                    backgroundColor: function (context) {
+                        let index = context.dataIndex,
+                            val = context.dataset.data[index];
+                        
+                        // if val < 4, draw red-ish
+                        return val < 4 ? 'rgba(255, 99, 132, 0.2)' :
+    
+                            // else if val > 4, draw blue-ish
+                            val > 4 ? 'rgba(54, 162, 235, 0.2)' :
+    
+                            // otherwise
+                            'rgba(255, 206, 86, 0.2)'
+                    },
+                    borderColor: function (context) {
+                        let index = context.dataIndex,
+                            val = context.dataset.data[index],
+                            alpha = 0.25;
+                        
+                        // if val < 4, draw red-ish
+                        return val < 4 ? 'rgba(255, 99, 132, ' + alpha + ')' :
+    
+                            // else if val > 4, draw blue-ish
+                            val > 4 ? 'rgba(54, 162, 235, ' + alpha + ')' :
+    
+                            // otherwise
+                            'rgba(255, 206, 86, ' + alpha + ')'
+                    },
+                    hoverBackgroundColor: function (context) {
+                        let index = context.dataIndex,
+                            val = context.dataset.data[index],
+                            alpha = 0.75;
+                        
+                        // if val < 4, draw red-ish
+                        return val < 4 ? 'rgba(255, 99, 132, ' + alpha + ')' :
+    
+                            // else if val > 4, draw blue-ish
+                            val > 4 ? 'rgba(54, 162, 235, ' + alpha + ')' :
+    
+                            // otherwise
+                            'rgba(255, 206, 86, ' + alpha + ')'
+                    },
+                    borderWidth: 1
+                }]
             },
-            legend: {
-                display: true,
-                labels: {
-                    align: 'center'
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 10,
+                        bottom: 10
+                    }
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        align: 'center'
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 }
