@@ -4,6 +4,9 @@ let calendarData = null, // variable to store the external data
 
 let currentMonth = 0;
 
+let countryCode,
+    countryLongName;
+
 let holidays = [], // variable to store all the available holidays
     months = [], // variable to store the months
     days = [], // variable to store the days
@@ -122,8 +125,6 @@ function init() {
 
                 // otherwise
                 else {
-                    let countryCode,
-                        countryLongName;
 
                     // check if the types of result is country, because postal codes don't exist in some countries
                     // or some API results are not the same as other standard ones
@@ -232,12 +233,14 @@ function prevYear() {
     let countryCode;
 
     // check if the types of result is country, because postal codes don't exist in some countries
-    // therefore, the last array element is instead a country type, rather than postal code type
-    // from there, the second last array element is administrative area level which causes error
-    // and in fact, the last element for the results of these countries will end up the last
-    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].types[0] == 'country')
-        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name;
-    else countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].short_name;
+    // or some API results are not the same as other standard ones
+    for (let j = 0; j < countryInfo.results[0].address_components.length; j++) {
+
+        if (countryInfo.results[0].address_components[j].types[0] == 'country') {
+            countryCode = countryInfo.results[0].address_components[j].short_name;
+            countryLongName = countryInfo.results[0].address_components[j].long_name;
+        }
+    }
     
     // reload the api
     // pass data to get either the search value if applicable, or the original value from html
@@ -303,12 +306,14 @@ function nextYear() {
     let countryCode;
 
     // check if the types of result is country, because postal codes don't exist in some countries
-    // therefore, the last array element is instead a country type, rather than postal code type
-    // from there, the second last array element is administrative area level which causes error
-    // and in fact, the last element for the results of these countries will end up the last
-    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].types[0] == 'country')
-        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name;
-    else countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].short_name;
+    // or some API results are not the same as other standard ones
+    for (let j = 0; j < countryInfo.results[0].address_components.length; j++) {
+
+        if (countryInfo.results[0].address_components[j].types[0] == 'country') {
+            countryCode = countryInfo.results[0].address_components[j].short_name;
+            countryLongName = countryInfo.results[0].address_components[j].long_name;
+        }
+    }
 
    // reload the api
     // pass data to get either the search value if applicable, or the original value from html
@@ -514,6 +519,7 @@ function changeCountry(countryFullName, native) {
             country.innerHTML = 'The country is not available or the search input type is incorrect' + '</br>' +
                                 'Please refer to the Instruction (?) for further instruction'
         } else {
+
             // pass data to get different countries' result
             getCalendar(searchCountry.value, yearHTML)
                 
@@ -558,7 +564,7 @@ async function saveCountry(countryFullName, native, keywords) {
 
     // create data 
     const data = {
-        origin: countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name,
+        origin: countryLongName,
         countryFullName,
         keywords,
         native
