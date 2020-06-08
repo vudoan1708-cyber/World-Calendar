@@ -522,6 +522,12 @@ body #tabularDisplay #mostWrapper #most {
   color: white;
 }
 
+body #tabularDisplay #mostWrapper .countryBtn {
+  margin-right: 10px;
+  padding: 10px;
+  background-color: #68877b;
+}
+
 body #tabularDisplay #mostWrapper #chartContainer {
   position: relative;
   text-align: center;

@@ -514,6 +514,12 @@ body {
                 color: white;
             }
 
+            .countryBtn {
+                margin-right: 10px;
+                padding: 10px;
+                background-color: map-get($bg-color, primary);
+            }
+
             #chartContainer {
                 position: relative;
                 text-align: center;

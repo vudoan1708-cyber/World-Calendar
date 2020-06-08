@@ -126,16 +126,13 @@ function init() {
                         countryLongName;
 
                     // check if the types of result is country, because postal codes don't exist in some countries
-                    // therefore, the last array element is instead a country type, rather than postal code type
-                    // from there, the second last array element is administrative area level which causes error
-                    // and in fact, the last element for the results of these countries will end up the last
-                    if (countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].types[0] == 'country') {
-                        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].short_name;
-                        countryLongName = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 2].long_name;
-                    }
-                    else {
-                        countryCode = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].short_name;
-                        countryLongName = countryInfo.results[0].address_components[countryInfo.results[0].address_components.length - 1].long_name;
+                    // or some API results are not the same as other standard ones
+                    for (let j = 0; j < countryInfo.results[0].address_components.length; j++) {
+
+                        if (countryInfo.results[0].address_components[j].types[0] == 'country') {
+                            countryCode = countryInfo.results[0].address_components[j].short_name;
+                            countryLongName = countryInfo.results[0].address_components[j].long_name;
+                        }
                     }
 
                     // trigger the below function with country identified through geolocation, and current year
@@ -457,7 +454,15 @@ async function getCountry() {
     if (name == 'UK') name = 'GB';
 
     const URL = `https://restcountries.eu/rest/v2/alpha/${name}`;
-    const request = await fetch(URL);
+
+    // create options for accept-language in GET method
+    const options = {
+        method: 'GET',
+        headers: {
+            'Accept-Language': '*'
+        }
+    }
+    const request = await fetch(URL, options);
     
     let countryFullName = await request.json();
     
@@ -590,25 +595,6 @@ async function searchedCountries(num) {
         tabularDisplay.style.visibility = 'hidden';
         tabularDisplay.style.opacity = 0;
 
-        // get all the HTML elements with a class name of most
-        let most_remover = document.querySelectorAll('.most'),
-            counter_remover = document.querySelectorAll('.counter');
-
-        // check if there are any of them on the HTML
-        if (most_remover.length != 0 && counter_remover.length != 0) {
-            
-            // loop through the length of array that contains all of them
-            for (let mr = 0; mr < most_remover.length; mr++)
-
-                // remove them one by one
-                most_remover[mr].remove();
-
-            // loop through the length of array that contains all of them
-            for (let cr = 0; cr < counter_remover.length; cr++)
-
-                // remove them one by one
-                counter_remover[cr].remove();
-        }
     } else {
         tabularDisplay.style.visibility = 'visible';
         tabularDisplay.style.opacity = 1;
@@ -623,14 +609,8 @@ async function searchedCountries(num) {
         // the most searched ones, and counter as chart.js elements
         let tr_body = [],
             td_body = [],
-            searched_countries = [],
-            most_searched = [],
-            counter = [];
-
-        // variables to count duplicated countries from the database
-        let current = null;
-        let count = 0;
-
+            searched_countries = [];
+            
         // get total number of th elements from HTML
         let th = document.querySelectorAll('th');
 
@@ -686,52 +666,63 @@ async function searchedCountries(num) {
             }
         }
 
-        // sort the searchedCountries array
-        searched_countries.sort();
+        handleData(searched_countries);
+    }
+}
 
-        // loop through it
-        for (c = 0; c < searched_countries.length; c++) {
+function handleData(searched_countries) {
 
-            // check if current is not equal any searched countries element
-            if (current != searched_countries[c]) {
-            
-                // check if the there are same elements before reassigning a new one
-                if (count > 1) {
+    let most_searched = [],
+        counter = [];
 
-                    // append countries with the highest searched times to most_searched
-                    // and the counts to counter
-                    // to visualise data using chart.js 
-                    most_searched.push(current);
-                    counter.push(count);
-                }
-            
-                // assign the element to current
-                current = searched_countries[c]; 
-            
-                // assign the counter to 1
-                count = 1;
+    // variables to count duplicated countries from the database
+    let currentTo = null;
+    let count = 0;
+
+    // sort the searchedCountries array
+    searched_countries.sort();
+
+    // loop through it
+    for (c = 0; c < searched_countries.length; c++) {
+
+        // check if currentTo is not equal any searched countries element
+        if (currentTo != searched_countries[c]) {
+
+            // check if the there are same elements before reassigning a new one
+            if (count > 1) {
+
+                // append countries with the highest searched times to most_searched
+                // and the counts to counter
+                // to visualise data using chart.js 
+                most_searched.push(currentTo);
+                counter.push(count);
             }
+        
+            // assign the element to currentTo
+            currentTo = searched_countries[c]; 
+        
+            // assign the counter to 1
+            count = 1;
+        }
+        
+        // otherwise
+        else {
+        
+            // count up the counter
+            count++;
             
-            // otherwise
-            else {
-            
-                // count up the counter
-                count++;
-                
-                // check the last element of the array
-                if (c == searched_countries.length - 1) {
+            // check the last element of the array
+            if (c == searched_countries.length - 1) {
 
-                    // append countries with the highest searched times to most_searched
-                    // and the counts to counter
-                    // to visualise data using chart.js 
-                    most_searched.push(current);
-                    counter.push(count);
-                }
+                // append countries with the highest searched times to most_searched
+                // and the counts to counter
+                // to visualise data using chart.js 
+                most_searched.push(currentTo);
+                counter.push(count);
             }
         }
-
-        chartData(most_searched, counter);
     }
+    chartData(most_searched, counter);
 }
 
 // Months
