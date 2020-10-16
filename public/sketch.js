@@ -42,7 +42,7 @@ const jan = document.getElementById('jan'),
 
       btnCentering = document.getElementById('btnCentering');
 
-      // support container
+      // support wrapper
       support_wrapper = document.getElementById('support_wrapper');
 
       // support_button
@@ -416,8 +416,12 @@ function showSupport() {
         // change the text of the support button
         support_button.textContent = 'X';
 
+        // scroll the window back to top
+        document.getElementById('support_container').scrollTop = 0;
+
     // otherwise
     } else {
+
         // hide support container
         support_wrapper.style.visibility = 'hidden';
         support_wrapper.style.opacity = 0;
@@ -609,6 +613,10 @@ async function searchedCountries(num) {
         tabularDisplay.style.opacity = 0;
 
     } else {
+
+        // scroll tabular window to top
+        document.getElementById('tabularContainer').scrollTop = 0;
+        
         tabularDisplay.style.visibility = 'visible';
         tabularDisplay.style.opacity = 1;
 
@@ -735,6 +743,7 @@ function handleData(searched_countries, num) {
             }
         }
     }
+    // console.log(most_searched, counter)
     chartData(most_searched, counter, num);
 }
 
